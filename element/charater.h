@@ -5,16 +5,17 @@
 #include "../shapes/Shape.h"
 #include "../algif5/algif.h"
 #include <stdbool.h>
+#include "state.h"
 
 /*
    [character object]
 */
-typedef enum CharacterType
+/*typedef enum CharacterType
 {
     STOP = 0,
     MOVE,
     ATK
-} CharacterType;
+} CharacterType;*/
 typedef struct _Character
 {
     int x, y;

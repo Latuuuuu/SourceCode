@@ -8,6 +8,7 @@
 #include "../element/projectile.h"
 #include "../element/Ball.h"
 #include "../element/susu.h"
+#include "../element/tungtungtung.h"
 /*
    [GameScene function]
 */
@@ -24,6 +25,7 @@ Scene *New_GameScene(int label)
     _Register_elements(pObj, New_Tree(Tree_L));
     _Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_Ball(Ball_L));
+    _Register_elements(pObj, New_tungtungtung(tungtungtung_L));
     _Register_elements(pObj, New_susu(Susu_L));
     // setting derived object function
     pObj->Update = game_scene_update;
