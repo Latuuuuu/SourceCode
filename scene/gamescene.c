@@ -6,6 +6,8 @@
 #include "../element/teleport.h"
 #include "../element/tree.h"
 #include "../element/projectile.h"
+#include "../element/Ball.h"
+#include "../element/susu.h"
 /*
    [GameScene function]
 */
@@ -21,6 +23,8 @@ Scene *New_GameScene(int label)
     _Register_elements(pObj, New_Teleport(Teleport_L));
     _Register_elements(pObj, New_Tree(Tree_L));
     _Register_elements(pObj, New_Character(Character_L));
+    _Register_elements(pObj, New_Ball(Ball_L));
+    _Register_elements(pObj, New_susu(Susu_L));
     // setting derived object function
     pObj->Update = game_scene_update;
     pObj->Draw = game_scene_draw;

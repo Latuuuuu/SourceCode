@@ -3,6 +3,8 @@
 		"PATH": "${workspaceFolder}\\..\\MinGW\\bin;${env:PATH}"
 	},
 	"files.associations": {
-		"tree.h": "c"
+		"tree.h": "c",
+		"allegro_primitives.h": "c",
+		"stdbool.h": "c"
 	}
 }

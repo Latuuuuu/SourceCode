@@ -19,7 +19,7 @@ typedef struct _Character
 {
     int x, y;
     int width, height;              // the width and height of image
-    bool dir;                       // true: face to right, false: face to left
+    int dir;                       // 1: face to right, 0: face to left, 2:face to up, 3:face to down
     int state;                      // the state of character
     ALGIF_ANIMATION *gif_status[3]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;

@@ -56,11 +56,11 @@ void _Floor_interact_Character(Elements *self, Elements *tar)
     int left_limit = 0 - chara->width / 2;
     if (chara->x < left_limit)
     {
-        _Character_update_position(tar, (left_limit - chara->x), 0);
+        _Character_update_position(tar, (left_limit - chara->x), chara->y);
     }
     else if (chara->x > right_limit)
     {
-        _Character_update_position(tar, (right_limit - chara->x), 0);
+        _Character_update_position(tar, (right_limit - chara->x), chara->y);
     }
 }
 void Floor_draw(Elements *self)
