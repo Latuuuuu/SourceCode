@@ -6,6 +6,8 @@
 		"tree.h": "c",
 		"allegro_primitives.h": "c",
 		"stdbool.h": "c",
-		"gamescene.h": "c"
+		"gamescene.h": "c",
+		"algif.h": "c",
+		"allegro_audio.h": "c"
 	}
 }
