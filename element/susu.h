@@ -4,17 +4,19 @@
 #include "element.h"
 #include "../shapes/Shape.h"
 #include "../algif5/algif.h"
+#include "state.h"
 #include <stdbool.h>
 
 /*
    [susu object]
 */
-typedef enum susuType
+/*typedef enum susuType
 {
     susu_STOP = 0,
     susu_MOVE,
     susu_ATK
-} susuType;
+} susuType;*/
+
 typedef struct _susu
 {
     int x, y;
@@ -35,5 +37,6 @@ void susu_interact(Elements *self);
 void susu_draw(Elements *self);
 void susu_destory(Elements *self);
 void _susu_update_position(Elements *self, int dx, int dy);
+Elements * get_susu(void);
 
 #endif

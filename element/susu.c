@@ -13,13 +13,21 @@
 /*
    [susu function]
 */
+
+static Elements *singleton_susu = NULL; // CHANGED: added singleton pointer to expose susu to other modules
+
+Elements *get_susu(void) // CHANGED: accessor to retrieve the singleton pointer
+{
+    return singleton_susu;
+}
+
 Elements *New_susu(int label)
 {
     susu *pDerivedObj = (susu *)malloc(sizeof(susu));
     Elements *pObj = New_Elements(label);
     // setting derived object member
     // load susu images
-    /*char state_string[3][10] = {"susu_stop", "susu_move", "attack"};
+    /*char state_string[3][10] = {"stop", "move", "attack"};
     for (int i = 0; i < 3; i++)
     {
         char buffer[50];
@@ -45,7 +53,7 @@ Elements *New_susu(int label)
                                         pDerivedObj->y + pDerivedObj->height);
     pDerivedObj->dir = false; // true: face to right, false: face to left
     // initial the animation component
-    pDerivedObj->state = susu_STOP;
+    pDerivedObj->state = STOP;
     pDerivedObj->new_proj = false;
     pObj->pDerivedObj = pDerivedObj;
     // setting derived object function
@@ -53,84 +61,86 @@ Elements *New_susu(int label)
     pObj->Update = susu_update;
     pObj->Interact = susu_interact;
     pObj->Destroy = susu_destory;
+
+    singleton_susu = pObj; // CHANGED: save pointer to singleton
     return pObj;
 }
 void susu_update(Elements *self)
 {
     // use the idea of finite state machine to deal with different state
     susu *chara = ((susu *)(self->pDerivedObj));
-    if (chara->state == susu_STOP)
+    if (chara->state == STOP)
     {
         if (key_state[ALLEGRO_KEY_SPACE])
         {
-            chara->state = susu_ATK;
+            chara->state = ATK;
         }
         else if (key_state[ALLEGRO_KEY_A])
         {
             chara->dir = 0;
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_D])
         {
             chara->dir = 1;
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_W])
         {
             chara->dir = 2;
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_S])
         {
             chara->dir = 3;
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else
         {
-            chara->state = susu_STOP;
+            chara->state = STOP;
         }
     }
-    else if (chara->state == susu_MOVE)
+    else if (chara->state == MOVE)
     {
         if (key_state[ALLEGRO_KEY_SPACE])
         {
-            chara->state = susu_ATK;
+            chara->state = ATK;
         }
         else if (key_state[ALLEGRO_KEY_A])
         {
             chara->dir = 0;
             _susu_update_position(self, -5, 0);
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_D])
         {
             chara->dir = 1;
             _susu_update_position(self, 5, 0);
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_W])
         {
             chara->dir = 2;
             _susu_update_position(self, 0, -5);
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_S])
         {
             chara->dir = 3;
             _susu_update_position(self, 0, 5);
-            chara->state = susu_MOVE;
+            chara->state = MOVE;
         }
         /*if (chara->gif_status[chara->state]->done)
-            chara->state = susu_STOP;*/
+            chara->state = STOP;*/
     }
-    else if (chara->state == susu_ATK)
+    else if (chara->state == ATK)
     {
         /*if (chara->gif_status[chara->state]->done)
         {
-            chara->state = susu_STOP;
+            chara->state = STOP;
             chara->new_proj = false;
         }*/
-        if (/*chara->gif_status[susu_ATK]->display_index == 2 &&*/ chara->new_proj == false)
+        if (/*chara->gif_status[ATK]->display_index == 2 &&*/ chara->new_proj == false)
         {
             Elements *pro;
             if (chara->dir==1)
@@ -170,7 +180,7 @@ void susu_draw(Elements *self)
     {
         al_draw_bitmap(frame, chara->x, chara->y, ((chara->dir) ? ALLEGRO_FLIP_HORIZONTAL : 0));
     }
-    if (chara->state == susu_ATK && chara->gif_status[chara->state]->display_index == 2)
+    if (chara->state == ATK && chara->gif_status[chara->state]->display_index == 2)
     {
         al_play_sample_instance(chara->atk_Sound);  
     }*/
