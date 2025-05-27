@@ -35,8 +35,15 @@ Elements *New_tungtungtung(int label)
     /* 幾何資料 */
     pDerivedObj->width  = al_get_bitmap_width (pDerivedObj->img[0]);
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img[0]);
-    pDerivedObj->x = 100;                                  /* 起始座標 */
-    pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
+    
+    Elements *susu_elem = get_susu();
+    susu * player =NULL;
+    if(susu_elem) player = (susu*)susu_elem->pDerivedObj;
+    do{
+        pDerivedObj->x = rand()%(WIDTH-pDerivedObj->width);                                  /* 起始座標 */
+        pDerivedObj->y = rand()%(HEIGHT-pDerivedObj->height);
+    }while(susu_elem && abs(pDerivedObj->x - player->x) < ARRIVE_EPSILON&&abs(pDerivedObj->y - player->y) < ARRIVE_EPSILON);
+    
     pDerivedObj->hitbox = New_Rectangle(
         pDerivedObj->x,
         pDerivedObj->y,
