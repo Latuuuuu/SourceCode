@@ -53,10 +53,10 @@ Scene *New_GameScene(int label)
     pObj->pDerivedObj = pDerivedObj;
     Load_Map_And_Generate_Tile(pObj);
     // register static elements (background decorations / player)
-    _Register_elements(pObj, New_Floor(Floor_L));
-    _Register_elements(pObj, New_Teleport(Teleport_L));
-    _Register_elements(pObj, New_Tree(Tree_L));
-    _Register_elements(pObj, New_Character(Character_L));
+    //_Register_elements(pObj, New_Floor(Floor_L));
+    //_Register_elements(pObj, New_Teleport(Teleport_L));
+    //_Register_elements(pObj, New_Tree(Tree_L));
+    //_Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_susu(Susu_L));
      _Register_elements(pObj, New_tungtungtung(tungtungtung_L));
 
