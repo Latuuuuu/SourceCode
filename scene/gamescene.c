@@ -11,7 +11,7 @@
 #include "../element/tungtungtung.h"
 #include "../global.h"
 #include <stdio.h>
-
+#include "../element/monster_factory.h"
 void Load_Map_And_Generate_Tile(Scene *scene) {
     FILE *fp = fopen("assets/map/map.txt", "r");
     if (!fp) {
@@ -38,7 +38,7 @@ void Load_Map_And_Generate_Tile(Scene *scene) {
         exit(1);
     }
 }
-#include "../element/monster_factory.h"
+
 /*
    [GameScene function]
 */
@@ -51,12 +51,14 @@ Scene *New_GameScene(int label)
     // setting derived object member
     pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");
     pObj->pDerivedObj = pDerivedObj;
+    Load_Map_And_Generate_Tile(pObj);
     // register static elements (background decorations / player)
     _Register_elements(pObj, New_Floor(Floor_L));
     _Register_elements(pObj, New_Teleport(Teleport_L));
     _Register_elements(pObj, New_Tree(Tree_L));
     _Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_susu(Susu_L));
+     _Register_elements(pObj, New_tungtungtung(tungtungtung_L));
 
     // initialise monster factory (optional reset)
     MF_Reset();
