@@ -32,7 +32,8 @@ Elements *New_tungtungtung(int label)
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img[0]);
     pDerivedObj->x = 300;
     pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
-    pDerivedObj->hitbox = New_Rectangle(pDerivedObj->x,
+    pDerivedObj->base.hp=50;
+    pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x,
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
@@ -97,7 +98,7 @@ void tungtungtung_destory(Elements *self)
     tungtungtung *Obj = ((tungtungtung *)(self->pDerivedObj));
     for (int i = 0; i < 3; i++)
         if (Obj->img[i]) al_destroy_bitmap(Obj->img[i]);
-    free(Obj->hitbox);
+    free(Obj->base.hitbox);
     free(Obj);
     free(self);
 }
@@ -107,7 +108,7 @@ void _tungtungtung_update_position(Elements *self, int dx, int dy)
     tungtungtung *chara = ((tungtungtung *)(self->pDerivedObj));
     chara->x += dx;
     chara->y += dy;
-    Shape *hitbox = chara->hitbox;
+    Shape *hitbox = chara->base.hitbox;
     hitbox->update_center_x(hitbox, dx);
     hitbox->update_center_y(hitbox, dy);
 }

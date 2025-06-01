@@ -1,4 +1,5 @@
 #include "Atk.h"
+#include "damageable.h"
 #include "tree.h"
 #include "../shapes/Circle.h"
 #include "../scene/gamescene.h" // for element label
@@ -6,7 +7,7 @@
 /*
    [Atk function]
 */
-Elements *New_Atk(int label, int x, int y, float vx,float vy)
+Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage)
 {
     Atk *pDerivedObj = (Atk *)malloc(sizeof(Atk));
     Elements *pObj = New_Elements(label);
@@ -18,6 +19,7 @@ Elements *New_Atk(int label, int x, int y, float vx,float vy)
     pDerivedObj->y = y;
     pDerivedObj->vx = vx;
     pDerivedObj->vy = vy;
+    pDerivedObj->damage = damage;
     pDerivedObj->hitbox = New_Circle(pDerivedObj->x + pDerivedObj->width / 2,
                                      pDerivedObj->y + pDerivedObj->height / 2,
                                      min(pDerivedObj->width, pDerivedObj->height) / 2);
@@ -51,6 +53,7 @@ void Atk_interact(Elements *self)
 {
     for (int j = 0; j < self->inter_len; j++)
     {
+        Atk *atk = (Atk *)(self->pDerivedObj);
         int inter_label = self->inter_obj[j];
         ElementVec labelEle = _Get_label_elements(scene, inter_label);
         for (int i = 0; i < labelEle.len; i++)
@@ -58,10 +61,19 @@ void Atk_interact(Elements *self)
             if (inter_label == Floor_L)
             {
                 _Atk_interact_Floor(self, labelEle.arr[i]);
+                continue;
             }
-            else if (inter_label == Tree_L)
+            /*else if (inter_label == Tree_L)
             {
                 _Atk_interact_Tree(self, labelEle.arr[i]);
+                continue;
+            }*/
+            Elements *tar = labelEle.arr[i];
+            Shape *tar_hitbox = ((Damageable *)tar->pDerivedObj)->hitbox;
+            if (tar_hitbox && tar_hitbox->overlap(tar_hitbox, atk->hitbox)) {
+                DealDamageIfPossible(tar, atk->damage);
+                self->dele = true;
+                return;
             }
         }
     }
@@ -78,7 +90,7 @@ void _Atk_interact_Tree(Elements *self, Elements *tar)
 {
     Atk *Obj = ((Atk *)(self->pDerivedObj));
     Tree *tree = ((Tree *)(tar->pDerivedObj));
-    if (tree->hitbox->overlap(tree->hitbox, Obj->hitbox))
+    if (tree->base.hitbox->overlap(tree->base.hitbox, Obj->hitbox))
     {
         self->dele = true;
     }
@@ -98,4 +110,19 @@ void Atk_destory(Elements *self)
     free(Obj->hitbox);
     free(Obj);
     free(self);
+}
+
+void DealDamageIfPossible(Elements *target, int damage) {
+    if (!target || !target->pDerivedObj) return;
+
+    Damageable *dmg = (Damageable *)target->pDerivedObj;
+
+    // 保護性檢查：確保有 hitbox 才視為 Damageable
+    if (!dmg->hitbox) return;
+
+    dmg->hp -= damage;
+
+    if (dmg->hp <= 0) {
+        target->dele = true;
+    }
 }

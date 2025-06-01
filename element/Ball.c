@@ -65,7 +65,7 @@ void Ball_interact(Elements *self)
         {
             Obj -> color = al_map_rgb(0,255,0);
         }
-        else if(Obj -> hitbox->overlap(Obj->hitbox, Obj2->hitbox))
+        else if(Obj -> hitbox->overlap(Obj->hitbox, Obj2->base.hitbox))
         {
             Obj -> color = al_map_rgb(0,0,255);
         }

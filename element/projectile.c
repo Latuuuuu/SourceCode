@@ -77,7 +77,7 @@ void _Projectile_interact_Tree(Elements *self, Elements *tar)
 {
     Projectile *Obj = ((Projectile *)(self->pDerivedObj));
     Tree *tree = ((Tree *)(tar->pDerivedObj));
-    if (tree->hitbox->overlap(tree->hitbox, Obj->hitbox))
+    if (tree->base.hitbox->overlap(tree->base.hitbox, Obj->hitbox))
     {
         self->dele = true;
     }

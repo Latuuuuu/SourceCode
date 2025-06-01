@@ -13,7 +13,8 @@ Elements *New_Tree(int label)
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img);
     pDerivedObj->x = 85;
     pDerivedObj->y = HEIGHT - pDerivedObj->height;
-    pDerivedObj->hitbox = New_Rectangle(pDerivedObj->x + pDerivedObj->width / 3,
+    pDerivedObj->base.hp=10;
+    pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x + pDerivedObj->width / 3,
                                         pDerivedObj->y + pDerivedObj->height / 3,
                                         pDerivedObj->x + 2 * pDerivedObj->width / 3,
                                         pDerivedObj->y + 2 * pDerivedObj->height / 3);
@@ -36,7 +37,7 @@ void Tree_destory(Elements *self)
 {
     Tree *Obj = ((Tree *)(self->pDerivedObj));
     al_destroy_bitmap(Obj->img);
-    free(Obj->hitbox);
+    free(Obj->base.hitbox);
     free(Obj);
     free(self);
 }

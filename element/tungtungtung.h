@@ -2,6 +2,7 @@
 #define tungtungtung_H_INCLUDED
 #include <allegro5/allegro_audio.h>
 #include "element.h"
+#include "damageable.h"
 #include "../shapes/Shape.h"
 #include "../algif5/algif.h"
 #include <stdbool.h>
@@ -13,6 +14,7 @@
 
 typedef struct //_tungtungtung
 {
+    Damageable base;
     int x, y;
     int width, height;              // the width and height of image
     bool dir;                       // true: face to right, false: face to left
@@ -21,7 +23,7 @@ typedef struct //_tungtungtung
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation
     bool new_proj;
-    Shape *hitbox; // the hitbox of object
+    //Shape *hitbox; // the hitbox of object
 } tungtungtung;
 Elements *New_tungtungtung(int label);
 void tungtungtung_update(Elements *self);

@@ -30,7 +30,7 @@ typedef struct _susu
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation
     bool new_proj;
-    Shape *hitbox; // the hitbox of object
+    //Shape *hitbox; // the hitbox of object
 } susu;
 Elements *New_susu(int label);
 void susu_update(Elements *self);

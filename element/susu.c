@@ -171,7 +171,7 @@ void susu_update(Elements *self)
 
             float vx = 10 * dx / len;
             float vy = 10 * dy / len;
-            pro = New_Atk(Atk_L,chara->x + chara->width - 100,chara->y + 10,vx,vy);
+            pro = New_Atk(Atk_L,chara->x + chara->width - 100,chara->y + 10,vx,vy,80);
             //pro = New_Projectile(Projectile_L,chara->x - 50, chara->y + 10,5);                                       
             if(pro)
             {
