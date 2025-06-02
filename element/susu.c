@@ -30,7 +30,7 @@ Elements *New_susu(int label)
     Elements *pObj = New_Elements(label);
     // setting derived object member
     // load susu images
-    char state_string[3][10] = {"stop", "move", "attack"};
+    char state_string[3][10] = {"stop_2", "move_2", "attack_2"};
     for (int i = 0; i < 3; i++)
     {
         char buffer[50];

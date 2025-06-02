@@ -12,7 +12,7 @@ Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage,int sid
     Atk *pDerivedObj = (Atk *)malloc(sizeof(Atk));
     Elements *pObj = New_Elements(label);
     // setting derived object member
-    pDerivedObj->img = al_load_bitmap("assets/image/projectile.png");
+    pDerivedObj->img = al_load_bitmap("assets/image/ball-02.png");
     pDerivedObj->width = al_get_bitmap_width(pDerivedObj->img);
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img);
     pDerivedObj->x = x;
