@@ -38,5 +38,6 @@ void susu_interact(Elements *self);
 void susu_draw(Elements *self);
 void susu_destroy(Elements *self);
 void _susu_update_position(Elements *self, int dx, int dy);
+Elements * get_susu(void);
 
 #endif

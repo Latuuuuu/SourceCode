@@ -11,8 +11,14 @@
     }
 #define MAX_ELEMENT 100
 #define min(x, y) ((x) > (y) ? (y) : (x))
-#define max(x, y) ((x) < (y) ? (y) : (x))
-// note that you can't assign initial value for extern variable!
+#define max(x, y) ((x) < (y) ? (x) : (y))
+
+// Map related definitions
+#define MAP_WIDTH 72
+#define MAP_HEIGHT 56
+#define TILE_SIZE 25
+
+// extern declarations
 extern const double FPS;
 extern const int WIDTH;
 extern const int HEIGHT;
@@ -24,5 +30,9 @@ extern ALLEGRO_EVENT_QUEUE *event_queue;
 extern ALLEGRO_EVENT event;
 extern ALLEGRO_TIMER *fps;
 extern bool debug_mode;
+
+extern int map[MAP_HEIGHT][MAP_WIDTH];
+extern ALLEGRO_BITMAP *floor_tile;
+extern ALLEGRO_BITMAP *wall_tile;
 
 #endif

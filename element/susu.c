@@ -17,21 +17,12 @@
    [susu function]
 */
 
-
-
-
 static Elements *singleton_susu = NULL; // CHANGED: added singleton pointer to expose susu to other modules
-
-
-
 
 Elements *get_susu(void) // CHANGED: accessor to retrieve the singleton pointer
 {
     return singleton_susu;
 }
-
-
-
 
 Elements *New_susu(int label)
 {
@@ -223,8 +214,5 @@ void _susu_update_position(Elements *self, int dx, int dy)
     hitbox->update_center_x(hitbox, dx);
     hitbox->update_center_y(hitbox, dy);
 }
-
-
-
 
 void susu_interact(Elements *self) {}
