@@ -26,6 +26,8 @@ Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage)
     // setting the interact object
     pObj->inter_obj[pObj->inter_len++] = Tree_L;
     pObj->inter_obj[pObj->inter_len++] = Floor_L;
+    pObj->inter_obj[pObj->inter_len++] = tungtungtung_L;
+    pObj->inter_obj[pObj->inter_len++] = Susu_L;
     // setting derived object function
     pObj->pDerivedObj = pDerivedObj;
     pObj->Update = Atk_update;
