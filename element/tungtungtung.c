@@ -38,6 +38,7 @@ Elements *New_tungtungtung(int label)
     pDerivedObj->x = 300;
     pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
     pDerivedObj->base.hp=50;
+    pDerivedObj->base.side=1;
     pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x,
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,

@@ -11,10 +11,11 @@ typedef struct _Atk
     int width, height; // the width and height of image
     int vx,vy;             // the velocity of Atk
     int damage;
+    int side;
     ALLEGRO_BITMAP *img;
     Shape *hitbox; // the hitbox of object
 } Atk;
-Elements *New_Atk(int label, int x, int y, float vx, float vy,int damage);
+Elements *New_Atk(int label, int x, int y, float vx, float vy,int damage,int side);
 void Atk_update(Elements *self);
 void Atk_interact(Elements *self);
 void Atk_draw(Elements *self);

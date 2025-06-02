@@ -55,8 +55,9 @@ Elements *New_susu(int label)
     pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x,
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
-                                        pDerivedObj->y + pDerivedObj->height);
+                                        pDerivedObj->y + pDerivedObj->height);                                    
     pDerivedObj->base.hp=1000;
+    pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
     // initial the animation component
     pDerivedObj->state = STOP;
@@ -82,6 +83,7 @@ void susu_update(Elements *self)
 {
     // use the idea of finite state machine to deal with different state
     susu *chara = ((susu *)(self->pDerivedObj));
+    int move_dis = 10;
     if (chara->state == STOP)
     {
         if (key_state[ALLEGRO_KEY_SPACE])
@@ -122,25 +124,25 @@ void susu_update(Elements *self)
         else if (key_state[ALLEGRO_KEY_A])
         {
             chara->dir = 0;
-            _susu_update_position(self, -5, 0);
+            _susu_update_position(self, -1*move_dis, 0);
             chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_D])
         {
             chara->dir = 1;
-            _susu_update_position(self, 5, 0);
+            _susu_update_position(self, move_dis, 0);
             chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_W])
         {
             chara->dir = 2;
-            _susu_update_position(self, 0, -5);
+            _susu_update_position(self, 0, -1*move_dis);
             chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_S])
         {
             chara->dir = 3;
-            _susu_update_position(self, 0, 5);
+            _susu_update_position(self, 0, move_dis);
             chara->state = MOVE;
         }
         if (chara->gif_status[chara->state]->done)
@@ -156,14 +158,18 @@ void susu_update(Elements *self)
         if (chara->gif_status[ATK]->display_index == 2 && chara->new_proj == false)
         {
             Elements *pro;
-            float dx = mouse.x - chara->x;
-            float dy = mouse.y - chara->y;
+            float dx = mouse.x - (chara->x + chara->width*0.5);
+            float dy = mouse.y - (chara->y + chara->height*0.5);
             float len = sqrt(dx * dx + dy * dy);
+            const float base_speed   = 12.0;
+            const float extra = 0.1;
 
-            float vx = 10 * dx / len;
-            float vy = 10 * dy / len;
-            pro = New_Atk(Atk_L,chara->x + chara->width - 100,chara->y + 10,vx,vy,80);
-            //pro = New_Projectile(Projectile_L,chara->x - 50, chara->y + 10,5);                                       
+            float speed = base_speed + extra * len;
+            if (speed > 40.0) speed = 40.0; 
+
+            float vx = speed * dx / len;
+            float vy = speed * dy / len;
+            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0,chara->y + chara->height*0.5 - 20.0,vx,vy,80,0);                                      
             if(pro)
             {
                 _Register_elements(scene, pro);

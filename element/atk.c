@@ -7,7 +7,7 @@
 /*
    [Atk function]
 */
-Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage)
+Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage,int side)
 {
     Atk *pDerivedObj = (Atk *)malloc(sizeof(Atk));
     Elements *pObj = New_Elements(label);
@@ -20,6 +20,7 @@ Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage)
     pDerivedObj->vx = vx;
     pDerivedObj->vy = vy;
     pDerivedObj->damage = damage;
+    pDerivedObj->side = side;
     pDerivedObj->hitbox = New_Circle(pDerivedObj->x + pDerivedObj->width / 2,
                                      pDerivedObj->y + pDerivedObj->height / 2,
                                      min(pDerivedObj->width, pDerivedObj->height) / 2);
@@ -53,18 +54,23 @@ void _Atk_update_position(Elements *self, float dx, float dy)
 }
 void Atk_interact(Elements *self)
 {
-    for (int j = 0; j < self->inter_len; j++)
+    Atk *atk = (Atk *)(self->pDerivedObj);
+    if (atk->x < -atk->width || atk->x > WIDTH + atk->width) //邊界判定
     {
-        Atk *atk = (Atk *)(self->pDerivedObj);
+        self->dele = true;
+        return;
+    }
+    for (int j = 0; j < self->inter_len; j++)
+    { 
         int inter_label = self->inter_obj[j];
         ElementVec labelEle = _Get_label_elements(scene, inter_label);
         for (int i = 0; i < labelEle.len; i++)
         {
-            if (inter_label == Floor_L)
+            /*if (inter_label == Floor_L)
             {
                 _Atk_interact_Floor(self, labelEle.arr[i]);
                 continue;
-            }
+            }*/
             /*else if (inter_label == Tree_L)
             {
                 _Atk_interact_Tree(self, labelEle.arr[i]);
@@ -72,7 +78,7 @@ void Atk_interact(Elements *self)
             }*/
             Elements *tar = labelEle.arr[i];
             Shape *tar_hitbox = ((Damageable *)tar->pDerivedObj)->hitbox;
-            if (tar_hitbox && tar_hitbox->overlap(tar_hitbox, atk->hitbox)) {
+            if (tar_hitbox && tar_hitbox->overlap(tar_hitbox, atk->hitbox) && atk->side != ((Damageable *)tar->pDerivedObj)->side) {
                 DealDamageIfPossible(tar, atk->damage);
                 self->dele = true;
                 return;
@@ -123,6 +129,7 @@ void DealDamageIfPossible(Elements *target, int damage) {
     if (!dmg->hitbox) return;
 
     dmg->hp -= damage;
+    printf("Hit monster! hp=%d\n", dmg->hp);
 
     if (dmg->hp <= 0) {
         target->dele = true;
