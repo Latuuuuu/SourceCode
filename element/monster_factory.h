@@ -8,6 +8,7 @@ typedef enum {
     MON_TUNGTUNGTUNG,
     MON_SUSU,
     MON_BALL,
+    MON_TRIPPI_TROPPI
     // add new monsters here
 } MonsterType;
 

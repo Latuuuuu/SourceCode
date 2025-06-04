@@ -3,86 +3,96 @@
 #include "../element/tungtungtung.h"
 #include "../element/susu.h"
 #include "../element/ball.h"
+#include "../element/trippi_troppi.h"
 #include "../element/element.h"
 
 /* ---------------------------------------------------------
    Internal control structure
    --------------------------------------------------------- */
 typedef struct {
-    double  timer;      /* countdown to next wave */
-    int     wave_idx;   /* which scripted wave we’re on (reserved) */
+    double  wave_timer; /* 距離下一波刷新的剩餘秒數 */
+    int     wave_idx;   /* 保留：腳本波次 (未用)    */
 } SpawnCtrl;
 
-static SpawnCtrl _ctrl;
+static SpawnCtrl _ctrl; /* 單例 */
 
 /* ---------------------------------------------------------
-   Helper: create one monster instance
+   Helper: 建立單一怪物
    --------------------------------------------------------- */
 static Elements *create_monster(MonsterType type, float x, float y)
 {
+    
     switch (type) {
-        case MON_TUNGTUNGTUNG:
-            return New_tungtungtung(tungtungtung_L); // position handled inside
-        case MON_SUSU:
-            return New_susu(Susu_L);
-        case MON_BALL:
-            return New_Ball(Ball_L);
-        default:
-            return NULL;
+        case MON_TUNGTUNGTUNG:  return New_tungtungtung(tungtungtung_L);
+        case MON_TRIPPI_TROPPI: return New_trippi_troppi(trippi_troppi_L);
+        case MON_BALL:          return New_Ball(Ball_L);
+        case MON_SUSU:          return New_susu(Susu_L);
+        default:                return NULL;
     }
 }
 
 /* ---------------------------------------------------------
-   Helper: count current tungtungtung in scene
+   Helper: 統計場上存活的主要怪物 (tung & trippi)
    --------------------------------------------------------- */
-static int count_tung(Scene *scene)
+static int count_alive_monsters(Scene *scene)
 {
     int cnt = 0;
     ElementVec all = _Get_all_elements(scene);
-    for (int i = 0; i < all.len; ++i)
-    {
-        if (all.arr[i]->label == tungtungtung_L)
-            ++cnt;
+    for (int i = 0; i < all.len; ++i) {
+        switch (all.arr[i]->label) {
+            case tungtungtung_L:
+            case trippi_troppi_L:
+                ++cnt;
+                break;
+            default:
+                break;
+        }
     }
     return cnt;
 }
 
 /* ---------------------------------------------------------
-   Public API
+   Public API: 外部呼叫
    --------------------------------------------------------- */
 void MF_Spawn(Scene *scene, MonsterType type, float x, float y)
 {
     Elements *m = create_monster(type, x, y);
-    if (m)
-        _Register_elements(scene, m);
+    if (m) _Register_elements(scene, m);
 }
 
 void MF_Update(Scene *scene, double dt)
 {
-    /* 每 5 秒試圖產生一波怪 */
-    _ctrl.timer -= dt;
-    if (_ctrl.timer <= 0.0) {
-        int curTung = count_tung(scene);
-        if (curTung < 10) {
-            /* 計算還能再生多少隻，最多補到 10 隻為止 */
-            int spawnN = 3;
-            if (curTung + spawnN > 10)
-                spawnN = 10 - curTung;
-            for (int i = 0; i < spawnN; ++i)
+    const int   TUNG_NUM   = 5;
+    const int   TRIPPI_NUM = 3;
+    const float INTERVAL   = 2.0f; /* 清場後 2 秒再刷 */
+
+    int alive = count_alive_monsters(scene);
+
+    if (alive == 0) {
+        /* 場上沒有 tung / trippi ，開始倒數 */
+        _ctrl.wave_timer -= dt;
+        if (_ctrl.wave_timer <= 0.0f) {
+            /* 產生新一波 */
+            for (int i = 0; i < TUNG_NUM; ++i)
                 MF_Spawn(scene, MON_TUNGTUNGTUNG, 0, 0);
+            for (int i = 0; i < TRIPPI_NUM; ++i)
+                MF_Spawn(scene, MON_TRIPPI_TROPPI, 0, 0);
+            /* 重置倒數以備下次 */
+            _ctrl.wave_timer = INTERVAL;
         }
-        /* 始終間隔 5 秒檢查一次 (即使沒生成也重置計時) */
-        _ctrl.timer = 5.0;
+    } else {
+        /* 還有怪 → 維持倒數在 INTERVAL */
+        _ctrl.wave_timer = INTERVAL;
     }
 }
 
 void MF_Reset(void)
 {
-    _ctrl.timer    = 0.0;
-    _ctrl.wave_idx = 0;
+    _ctrl.wave_timer = 0.0; /* 啟動時立即刷第一波 */
+    _ctrl.wave_idx   = 0;
 }
 
 void MF_Destroy(void)
 {
-    /* 如果未來配置資源，這裡釋放 */
+    /* 未配置資源，留空 */
 }

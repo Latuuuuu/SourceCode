@@ -9,6 +9,7 @@
 #include "../element/Ball.h"
 #include "../element/susu.h"
 #include "../element/tungtungtung.h"
+#include "../element/trippi_troppi.h"
 #include "../global.h"
 #include <stdio.h>
 #include "../element/monster_factory.h"
@@ -58,7 +59,8 @@ Scene *New_GameScene(int label)
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_susu(Susu_L));
-     _Register_elements(pObj, New_tungtungtung(tungtungtung_L));
+    _Register_elements(pObj, New_tungtungtung(tungtungtung_L));
+    _Register_elements(pObj, New_trippi_troppi(trippi_troppi_L));
 
     // initialise monster factory (optional reset)
     MF_Reset();
