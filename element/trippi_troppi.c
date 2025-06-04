@@ -1,69 +1,72 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
 #include "trippi_troppi.h"
-#include "susu.h"              /* 提供 get_susu() 介面 */
+#include "susu.h"              /* get_susu() */
+#include "atk.h"               /* New_Atk()  */
 #include "../scene/sceneManager.h"
 #include "../shapes/Rectangle.h"
-#include "../global.h"           /* WIDTH / HEIGHT 常數 */
+#include "../global.h"
 #include <math.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <stdio.h>
 #include <stdbool.h>
+#include "../scene/gamescene.h"   /* ⬅️ 提供 Atk_L、tungtungtung_L... */
 
 /* --------------------------------------------------
-   追蹤行為參數
+   追蹤 / 攻擊參數
    --------------------------------------------------*/
-#define CHASE_SPEED    3.0f  /* 像素 / frame */
-#define ARRIVE_EPSILON 60.0f  /* 抵達判定半徑 */
+#define CHASE_SPEED        3.0f   /* 像素 / frame */
+#define ARRIVE_EPSILON    60.0f   /* 停下距離     */
+#define COOLDOWN_FRAMES  180      /* 60FPS → 3 秒  */
+#define BULLET_DAMAGE      40
+#define BULLET_SPEED       15.0f
+#define SHOT_RANGE  500.0f
+
+static void _trippi_troppi_update_position(Elements *self, int dx, int dy);
 
 /* --------------------------------------------------
-   建構函式
+   建構
    --------------------------------------------------*/
 Elements *New_trippi_troppi(int label)
 {
     trippi_troppi *pDerivedObj = malloc(sizeof(trippi_troppi));
-    Elements     *pObj        = New_Elements(label);
+    Elements      *pObj        = New_Elements(label);
 
-    /* 載入靜態貼圖 */
-    const char *state_string[3] = {"stop", "move", "attack"};
+    /* 載入三張 PNG：停 / 走 / 攻 (可共用攻擊圖或重複最後一張) */
+    const char *state_str[3] = {"stop", "move", "attack"};
     for (int i = 0; i < 3; ++i) {
-        char buffer[64];
-        sprintf(buffer, "assets/image/Trippi-Troppi_%s.png", state_string[i]);
-        pDerivedObj->img[i] = al_load_bitmap(buffer);
+        char buf[64];
+        sprintf(buf, "assets/image/Trippi-Troppi_%s.png", state_str[i]);
+        pDerivedObj->img[i] = al_load_bitmap(buf);
     }
 
-    /* 幾何資料 */
+    /* 幾何 */
     pDerivedObj->width  = al_get_bitmap_width (pDerivedObj->img[0]);
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img[0]);
-    pDerivedObj->x = 300;
-    pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
-    pDerivedObj->base.hp=50;
-    pDerivedObj->base.side=1;
-    pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x,
-                                        pDerivedObj->y,
-                                        pDerivedObj->x + pDerivedObj->width,
-                                        pDerivedObj->y + pDerivedObj->height);
-    pDerivedObj->dir = false; // true: face to right, false: face to left
-    // initial the animation component
-    
-    Elements *susu_elem = get_susu();
-    susu * player =NULL;
-    if(susu_elem) player = (susu*)susu_elem->pDerivedObj;
-    do{
-        pDerivedObj->x = rand()%(WIDTH-pDerivedObj->width);                                  /* 起始座標 */
-        pDerivedObj->y = rand()%(HEIGHT-pDerivedObj->height);
-    }while(susu_elem && abs(pDerivedObj->x - player->x) < ARRIVE_EPSILON&&abs(pDerivedObj->y - player->y) < ARRIVE_EPSILON);
-    
+
+    /* 隨機初始位置，避免貼玩家 */
+    Elements *plE = get_susu();
+    susu *pl = plE ? (susu*)plE->pDerivedObj : NULL;
+    do {
+        pDerivedObj->x = rand() % (WIDTH  - pDerivedObj->width);
+        pDerivedObj->y = rand() % (HEIGHT - pDerivedObj->height);
+    } while (pl && fabs(pDerivedObj->x - pl->x) < ARRIVE_EPSILON &&
+                  fabs(pDerivedObj->y - pl->y) < ARRIVE_EPSILON);
+
+    /* Damageable 基底 */
+    pDerivedObj->base.hp    = 60;
+    pDerivedObj->base.side  = 1; /* 敵方 */
     pDerivedObj->base.hitbox = New_Rectangle(
         pDerivedObj->x,
         pDerivedObj->y,
         pDerivedObj->x + pDerivedObj->width,
         pDerivedObj->y + pDerivedObj->height);
 
-    pDerivedObj->dir   = false;  /* 預設面向左 */
-    pDerivedObj->state = STOP;
+    pDerivedObj->dir      = false;
+    pDerivedObj->state    = STOP;
+    pDerivedObj->cooldown = 0;   /* 立即可射擊 */
 
-    /* 綁定多型函式 */
+    /* 綁定函式 */
     pObj->pDerivedObj = pDerivedObj;
     pObj->Draw        = trippi_troppi_draw;
     pObj->Update      = trippi_troppi_update;
@@ -74,37 +77,49 @@ Elements *New_trippi_troppi(int label)
 }
 
 /* --------------------------------------------------
-   每幀更新：固定速率追蹤 susu
+   更新：追蹤 + 冷卻射擊
    --------------------------------------------------*/
 void trippi_troppi_update(Elements *self)
 {
-    trippi_troppi *chara = self->pDerivedObj;
+    trippi_troppi *ch = self->pDerivedObj;
+    if (ch->cooldown > 0) ch->cooldown--; /* 倒數 */
 
-    /* 透過單例 accessor 取得 susu */
-    Elements *susu_elem = get_susu();
-    if (!susu_elem) return;              /* 還沒生成 susu */
+    Elements *plE = get_susu();
+    if (!plE) return;
+    susu *pl = plE->pDerivedObj;
 
-    susu *target = susu_elem->pDerivedObj;
-
-    /* 1) 取得雙方中心點 */
-    int cx = chara->x + chara->width  / 2;
-    int cy = chara->y + chara->height / 2;
-    int tx = target->x + target->width  / 2;
-    int ty = target->y + target->height / 2;
-
+    /* 中心點 */
+    int cx = ch->x + ch->width  / 2;
+    int cy = ch->y + ch->height / 2;
+    int tx = pl->x + pl->width  / 2;
+    int ty = pl->y + pl->height / 2;
     int dx = tx - cx;
     int dy = ty - cy;
     float dist = sqrtf((float)dx * dx + (float)dy * dy);
 
-    /* 2) 移動或停止 */
-    if (dist > ARRIVE_EPSILON) {
+    /* 追蹤移動 */
+    if (dist > SHOT_RANGE) {
         float vx = CHASE_SPEED * dx / dist;
         float vy = CHASE_SPEED * dy / dist;
         _trippi_troppi_update_position(self, (int)vx, (int)vy);
-        chara->dir   = (dx >= 0);
-        chara->state = MOVE;
+        ch->dir   = (dx >= 0);
+        ch->state = MOVE;
     } else {
-        chara->state = STOP;
+        ch->state = STOP;
+    }
+
+    /* 射擊判定：只有在 STOP 狀態且冷卻完畢 */
+    if (ch->state == STOP && ch->cooldown == 0) {
+        if (dist < 1.0f) dist = 1.0f;
+        float vx = BULLET_SPEED * dx / dist;
+        float vy = BULLET_SPEED * dy / dist;
+        Elements *proj = New_Atk(Atk_L,
+                                 cx - 20.0f, cy - 20.0f,
+                                 vx, vy,
+                                 BULLET_DAMAGE,
+                                 1); /* 怪物 side */
+        if (proj) _Register_elements(scene, proj);
+        ch->cooldown = COOLDOWN_FRAMES;
     }
 }
 
@@ -113,49 +128,42 @@ void trippi_troppi_update(Elements *self)
    --------------------------------------------------*/
 void trippi_troppi_draw(Elements *self)
 {
-    trippi_troppi *chara = self->pDerivedObj;
-    ALLEGRO_BITMAP *bmp = chara->img[chara->state];
+    trippi_troppi *ch = self->pDerivedObj;
+    ALLEGRO_BITMAP *bmp = ch->img[ch->state];
     if (!bmp) return;
-
-    al_draw_bitmap(bmp,
-                   chara->x,
-                   chara->y,
-                   chara->dir ? ALLEGRO_FLIP_HORIZONTAL : 0);
+    al_draw_bitmap(bmp, ch->x, ch->y, ch->dir ? ALLEGRO_FLIP_HORIZONTAL : 0);
 }
 
-void trippi_troppi_interact(Elements *self) { /* 之後可以處理碰撞 */ }
+void trippi_troppi_interact(Elements *self) { /* 如需碰撞處理可擴充 */ }
 
 /* --------------------------------------------------
    清理
    --------------------------------------------------*/
 void trippi_troppi_destory(Elements *self)
 {
-    trippi_troppi *chara = self->pDerivedObj;
+    trippi_troppi *ch = self->pDerivedObj;
     for (int i = 0; i < 3; ++i)
-        if (chara->img[i]) al_destroy_bitmap(chara->img[i]);
-    free(chara->base.hitbox);
-    free(chara);
+        if (ch->img[i]) al_destroy_bitmap(ch->img[i]);
+    free(ch->base.hitbox);
+    free(ch);
     free(self);
 }
 
 /* --------------------------------------------------
-   私有：同步位置與 hitbox，並限制在視窗內
+   私用：位置與 hitbox 同步
    --------------------------------------------------*/
-void _trippi_troppi_update_position(Elements *self, int dx, int dy)
+static void _trippi_troppi_update_position(Elements *self, int dx, int dy)
 {
-    trippi_troppi *chara = self->pDerivedObj;
+    trippi_troppi *ch = self->pDerivedObj;
+    ch->x += dx;
+    ch->y += dy;
 
-    chara->x += dx;
-    chara->y += dy;
+    if (ch->x < 0)                       ch->x = 0;
+    if (ch->y < 0)                       ch->y = 0;
+    if (ch->x > WIDTH  - ch->width)      ch->x = WIDTH  - ch->width;
+    if (ch->y > HEIGHT - ch->height)     ch->y = HEIGHT - ch->height;
 
-    /* 保持在畫面邊界 */
-    if (chara->x < 0)                       chara->x = 0;
-    if (chara->y < 0)                       chara->y = 0;
-    if (chara->x > WIDTH  - chara->width)   chara->x = WIDTH  - chara->width;
-    if (chara->y > HEIGHT - chara->height)  chara->y = HEIGHT - chara->height;
-
-    /* hitbox 也要同步 */
-    Shape *hb = chara->base.hitbox;
+    Shape *hb = ch->base.hitbox;
     hb->update_center_x(hb, dx);
     hb->update_center_y(hb, dy);
 }
