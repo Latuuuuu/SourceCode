@@ -84,11 +84,21 @@ void susu_update(Elements *self)
     // use the idea of finite state machine to deal with different state
     susu *chara = ((susu *)(self->pDerivedObj));
     int move_dis = 10;
+    bool space=0;
+    int space_co = 3;
     if (chara->state == STOP)
     {
-        if (key_state[ALLEGRO_KEY_SPACE])
+        if (key_state[ALLEGRO_KEY_Q])
         {
             chara->state = ATK;
+        }
+        else if (key_state[ALLEGRO_KEY_SPACE] && space==0)
+        {
+            if(chara->dir==0)  _susu_update_position(self, -1*move_dis*space_co, 0);
+            else if(chara->dir==1) _susu_update_position(self, move_dis*space_co, 0);
+            else if(chara->dir==2) _susu_update_position(self, 0, -1*move_dis*space_co);
+            else if(chara->dir==3) _susu_update_position(self, 0, move_dis*space_co);
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_A])
         {
@@ -114,12 +124,24 @@ void susu_update(Elements *self)
         {
             chara->state = STOP;
         }
+        if (key_state[ALLEGRO_KEY_SPACE]==0 && space)
+        {
+            space=0;
+        }
     }
     else if (chara->state == MOVE)
     {
-        if (key_state[ALLEGRO_KEY_SPACE])
+        if (key_state[ALLEGRO_KEY_Q])
         {
             chara->state = ATK;
+        }
+        else if (key_state[ALLEGRO_KEY_SPACE] && space==0)
+        {
+            if(chara->dir==0)  _susu_update_position(self, -1*move_dis*space_co, 0);
+            else if(chara->dir==1) _susu_update_position(self, move_dis*space_co, 0);
+            else if(chara->dir==2) _susu_update_position(self, 0, -1*move_dis*space_co);
+            else if(chara->dir==3) _susu_update_position(self, 0, move_dis*space_co);
+            chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_A])
         {
@@ -146,7 +168,13 @@ void susu_update(Elements *self)
             chara->state = MOVE;
         }
         if (chara->gif_status[chara->state]->done)
+        {
             chara->state = STOP;
+        }
+        if (key_state[ALLEGRO_KEY_SPACE]==0 && space)
+        {
+            space=0;
+        }    
     }
     else if (chara->state == ATK)
     {
@@ -161,15 +189,16 @@ void susu_update(Elements *self)
             float dx = mouse.x - (chara->x + chara->width*0.5);
             float dy = mouse.y - (chara->y + chara->height*0.5);
             float len = sqrt(dx * dx + dy * dy);
-            const float base_speed   = 12.0;
+            /*const float base_speed   = 12.0;
             const float extra = 0.1;
 
             float speed = base_speed + extra * len;
-            if (speed > 40.0) speed = 40.0; 
+            if (speed > 40.0) speed = 40.0;*/
 
+            float speed = 25.0;
             float vx = speed * dx / len;
             float vy = speed * dy / len;
-            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0,chara->y + chara->height*0.5 - 20.0,vx,vy,80,0);                                      
+            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0, chara->y + chara->height*0.5 - 70.0,vx,vy,80,0);                                      
             if(pro)
             {
                 _Register_elements(scene, pro);
@@ -188,7 +217,7 @@ void susu_draw(Elements *self)
     //al_draw_bitmap(chara->img, chara->x, chara->y, ((chara->dir) ? ALLEGRO_FLIP_HORIZONTAL : 0));
     if (frame)
     {
-        al_draw_bitmap(frame, chara->x, chara->y, ((chara->dir) ? ALLEGRO_FLIP_HORIZONTAL : 0));
+        al_draw_bitmap(frame, chara->x, chara->y, (((mouse.x - (chara->x + chara->width*0.5))>0) ? ALLEGRO_FLIP_HORIZONTAL : 0));
     }
     if (chara->atk_Sound && chara->gif_status[chara->state] &&chara->state == ATK && chara->gif_status[chara->state]->display_index == 2)
     {

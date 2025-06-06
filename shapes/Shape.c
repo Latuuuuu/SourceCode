@@ -33,9 +33,16 @@ bool checkOverlap_rr(Rectangle *r1, Rectangle *r2)
 
 bool checkOverlap_rc(Rectangle *r, Circle *c)
 {
-	double x = max(r->x1, min(c->x, r->x2));
+	/*double x = max(r->x1, min(c->x, r->x2));
 	double y = max(r->y1, min(c->y, r->y2));
-	return (c->r * c->r) >= Point_dist2((Point *)(New_Point(c->x, c->y)->pDerivedObj), (Point *)(New_Point(x, y)->pDerivedObj));
+	return (c->r * c->r) >= Point_dist2((Point *)(New_Point(c->x, c->y)->pDerivedObj), (Point *)(New_Point(x, y)->pDerivedObj));*/
+	double closest_x = fmax(r->x1, fmin(c->x, r->x2));
+    double closest_y = fmax(r->y1, fmin(c->y, r->y2));
+
+    double dx = c->x - closest_x;
+    double dy = c->y - closest_y;
+
+    return (dx * dx + dy * dy) <= (c->r * c->r); //不呼叫point直接用平方算
 }
 
 bool checkOverlap_cc(Circle *c1, Circle *c2)
