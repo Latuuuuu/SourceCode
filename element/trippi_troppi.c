@@ -7,7 +7,7 @@
 #include "../shapes/Rectangle.h"
 #include "../global.h"
 #include <math.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "../scene/gamescene.h"   /* ⬅️ 提供 Atk_L、tungtungtung_L... */
@@ -111,11 +111,19 @@ void trippi_troppi_update(Elements *self)
     /* 射擊判定：只有在 STOP 狀態且冷卻完畢 */
     if (ch->state == STOP && ch->cooldown == 0) {
         if (dist < 1.0f) dist = 1.0f;
-        float vx = BULLET_SPEED * dx / dist;
-        float vy = BULLET_SPEED * dy / dist;
+
+        /* ---------- 速度整數化並確保非 0 軸 ---------- */
+        float fx = BULLET_SPEED * dx / dist;
+        float fy = BULLET_SPEED * dy / dist;
+
+        int vx = (int)roundf(fx);        // NEW
+        int vy = (int)roundf(fy);        // NEW
+        if (vx == 0) vx = (dx > 0) ? 1 : -1;  // FIX
+        if (vy == 0) vy = (dy > 0) ? 1 : -1;  // FIX
+
         Elements *proj = New_Atk(Atk_L,
-                                 cx - 20.0f, cy - 20.0f,
-                                 vx, vy,
+                                 cx - 20, cy - 20,   /* 子彈起始點 */
+                                 (float)vx, (float)vy,
                                  BULLET_DAMAGE,
                                  1); /* 怪物 side */
         if (proj) _Register_elements(scene, proj);
@@ -134,7 +142,7 @@ void trippi_troppi_draw(Elements *self)
     al_draw_bitmap(bmp, ch->x, ch->y, ch->dir ? ALLEGRO_FLIP_HORIZONTAL : 0);
 }
 
-void trippi_troppi_interact(Elements *self) { /* 如需碰撞處理可擴充 */ }
+void trippi_troppi_interact(Elements *self) { /* 目前無需額外碰撞 */ }
 
 /* --------------------------------------------------
    清理
