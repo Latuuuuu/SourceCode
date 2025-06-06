@@ -17,6 +17,8 @@
 		"susu.h": "c",
 		"projectile.h": "c",
 		"rectangle.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"circle.h": "c",
+		"global.h": "c"
 	}
 }

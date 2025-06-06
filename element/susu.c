@@ -5,6 +5,7 @@
 
 #include "projectile.h"
 #include "atk.h"
+#include "combat.h"
 #include "../global.h"
 #include "../scene/sceneManager.h"
 #include "../shapes/Rectangle.h"
@@ -13,6 +14,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <stdio.h>
 #include <stdbool.h>
+#define M_PI 3.14159265358979323846
 /*
    [susu function]
 */
@@ -30,8 +32,8 @@ Elements *New_susu(int label)
     Elements *pObj = New_Elements(label);
     // setting derived object member
     // load susu images
-    char state_string[3][10] = {"stop_2", "move_2", "attack_2"};
-    for (int i = 0; i < 3; i++)
+    char state_string[4][10] = {"stop_2", "move_2", "attack_2","combat_2"};
+    for (int i = 0; i < 4; i++)
     {
         char buffer[50];
         sprintf(buffer, "assets/image/chara_%s.gif", state_string[i]);
@@ -56,7 +58,7 @@ Elements *New_susu(int label)
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);                                    
-    pDerivedObj->base.hp=1000;
+    pDerivedObj->base.hp=10000;
     pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
     // initial the animation component
@@ -84,11 +86,21 @@ void susu_update(Elements *self)
     // use the idea of finite state machine to deal with different state
     susu *chara = ((susu *)(self->pDerivedObj));
     int move_dis = 10;
-    bool space=0;
-    int space_co = 3;
+    static bool space=0;
+    int space_co = 15;
+    ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
+    if (key_state[ALLEGRO_KEY_SPACE]==0)
+    {
+        space=0;
+    }
     if (chara->state == STOP)
     {
-        if (key_state[ALLEGRO_KEY_Q])
+        if (state.buttons & 1)
+        {
+            chara->state = COMBAT;
+        }
+        else if (key_state[ALLEGRO_KEY_Q])
         {
             chara->state = ATK;
         }
@@ -98,6 +110,7 @@ void susu_update(Elements *self)
             else if(chara->dir==1) _susu_update_position(self, move_dis*space_co, 0);
             else if(chara->dir==2) _susu_update_position(self, 0, -1*move_dis*space_co);
             else if(chara->dir==3) _susu_update_position(self, 0, move_dis*space_co);
+            space = 1;
             chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_A])
@@ -124,14 +137,15 @@ void susu_update(Elements *self)
         {
             chara->state = STOP;
         }
-        if (key_state[ALLEGRO_KEY_SPACE]==0 && space)
-        {
-            space=0;
-        }
+        
     }
     else if (chara->state == MOVE)
-    {
-        if (key_state[ALLEGRO_KEY_Q])
+    {   
+        if (state.buttons & 1)
+        {
+            chara->state = COMBAT;
+        }
+        else if (key_state[ALLEGRO_KEY_Q])
         {
             chara->state = ATK;
         }
@@ -141,6 +155,7 @@ void susu_update(Elements *self)
             else if(chara->dir==1) _susu_update_position(self, move_dis*space_co, 0);
             else if(chara->dir==2) _susu_update_position(self, 0, -1*move_dis*space_co);
             else if(chara->dir==3) _susu_update_position(self, 0, move_dis*space_co);
+            space =1;
             chara->state = MOVE;
         }
         else if (key_state[ALLEGRO_KEY_A])
@@ -171,10 +186,7 @@ void susu_update(Elements *self)
         {
             chara->state = STOP;
         }
-        if (key_state[ALLEGRO_KEY_SPACE]==0 && space)
-        {
-            space=0;
-        }    
+           
     }
     else if (chara->state == ATK)
     {
@@ -205,6 +217,70 @@ void susu_update(Elements *self)
             }
 
 
+            chara->new_proj = true;
+        }
+    }
+    else if (chara->state == COMBAT)
+    {
+        if (chara->gif_status[chara->state]->done)
+        {
+            chara->state = STOP;
+            chara->new_proj = false;
+        }
+        if (chara->gif_status[COMBAT]->display_index == 3 && chara->new_proj == false)
+        {
+            Elements *pro;
+            float dx = mouse.x - (chara->x + chara->width*0.5);
+            float dy = mouse.y - (chara->y + chara->height*0.5);
+
+            const int reach = 200;      // 攻擊距離
+            const int thick = 300;      // 攻擊寬度
+
+            float cx = chara->x + chara->width  * 0.5f;
+            float cy = chara->y + chara->height * 0.5f;
+
+            float angle = atan2f(dy, dx);   // [-π, π]
+            int x1,y1,x2,y2;
+
+            // 依角度歸類方向
+            int dir;
+            if (angle > -M_PI/4 && angle <=  M_PI/4)      dir = 0; // 右
+            else if (angle >  M_PI/4 && angle <= 3*M_PI/4) dir = 1; // 下
+            else if (angle > -3*M_PI/4 && angle <=-M_PI/4) dir = 2; // 上
+            else                                            dir = 3; // 左
+
+            switch (dir) {
+                case 0: // → 右
+                    x1 = cx;
+                    y1 = cy - thick/2;
+                    x2 = cx + reach;
+                    y2 = cy + thick/2;
+                    break;
+                case 1: // ↓ 下
+                    x1 = cx - thick/2;
+                    y1 = cy;
+                    x2 = cx + thick/2;
+                    y2 = cy + reach;
+                    break;
+                case 2: // ↑ 上
+                    x1 = cx - thick/2;
+                    y1 = cy - reach;
+                    x2 = cx + thick/2;
+                    y2 = cy;
+                    break;
+                case 3: // ← 左
+                    x1 = cx - reach;
+                    y1 = cy - thick/2;
+                    x2 = cx;
+                    y2 = cy + thick/2;
+                    break;
+            }
+
+            pro = New_Combat(Combat_L, x1, y1, x2, y2, 80, 0);                                      
+            if(pro)
+            {
+                _Register_elements(scene, pro);
+            }
             chara->new_proj = true;
         }
     }
