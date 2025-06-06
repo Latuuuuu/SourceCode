@@ -6,6 +6,45 @@
 #include "../element/trippi_troppi.h"
 #include "../element/element.h"
 
+
+/* ---------------------------------------------------------
+   波次腳本用的資料結構
+   --------------------------------------------------------- */
+typedef struct {
+    MonsterType type;   /* 怪物種類 */
+    int         count;  /* 數量     */
+} SpawnEntry;
+
+typedef struct {
+    const SpawnEntry *entries; /* 指向本波的 SpawnEntry 陣列 */
+    int               entry_num;
+} Wave;
+
+/* ---------------------------------------------------------
+   這是你的波次腳本 (只改這裡就可以增刪波次)
+   --------------------------------------------------------- */
+/* Wave 0 : 3 × tung */
+static const SpawnEntry wave0_entries[] = {
+    { MON_TUNGTUNGTUNG, 3 },
+};
+/* Wave 1 : 5 × trippi */
+static const SpawnEntry wave1_entries[] = {
+    { MON_TRIPPI_TROPPI, 5 },
+};
+/* Wave 2 : 4 × tung , 2 × trippi */
+static const SpawnEntry wave2_entries[] = {
+    { MON_TUNGTUNGTUNG, 4 },
+    { MON_TRIPPI_TROPPI, 2 },
+};
+
+/* 把每波統整在同一個陣列，方便用 wave_idx 存取 */
+static const Wave g_waves[] = {
+    { wave0_entries, sizeof(wave0_entries)/sizeof(wave0_entries[0]) },
+    { wave1_entries, sizeof(wave1_entries)/sizeof(wave1_entries[0]) },
+    { wave2_entries, sizeof(wave2_entries)/sizeof(wave2_entries[0]) },
+};
+static const int g_wave_cnt = sizeof(g_waves)/sizeof(g_waves[0]);
+
 /* ---------------------------------------------------------
    Internal control structure
    --------------------------------------------------------- */
@@ -62,29 +101,38 @@ void MF_Spawn(Scene *scene, MonsterType type, float x, float y)
 
 void MF_Update(Scene *scene, double dt)
 {
-    const int   TUNG_NUM   = 5;
-    const int   TRIPPI_NUM = 3;
-    const float INTERVAL   = 2.0f; /* 清場後 2 秒再刷 */
+    const float INTERVAL = 2.0f;          /* 清場後 n 秒才刷下一波 */
 
     int alive = count_alive_monsters(scene);
 
-    if (alive == 0) {
-        /* 場上沒有 tung / trippi ，開始倒數 */
+    if (alive == 0) {                     /* 場上已經沒有 tung / trippi */
         _ctrl.wave_timer -= dt;
+
         if (_ctrl.wave_timer <= 0.0f) {
-            /* 產生新一波 */
-            for (int i = 0; i < TUNG_NUM; ++i)
-                MF_Spawn(scene, MON_TUNGTUNGTUNG, 0, 0);
-            for (int i = 0; i < TRIPPI_NUM; ++i)
-                MF_Spawn(scene, MON_TRIPPI_TROPPI, 0, 0);
-            /* 重置倒數以備下次 */
-            _ctrl.wave_timer = INTERVAL;
+            /* 1) 還有腳本波可以播？ */
+            if (_ctrl.wave_idx < g_wave_cnt) {
+                const Wave *wave = &g_waves[_ctrl.wave_idx];
+
+                /* 2) 依腳本生怪 */
+                for (int i = 0; i < wave->entry_num; ++i) {
+                    const SpawnEntry *e = &wave->entries[i];
+                    for (int n = 0; n < e->count; ++n)
+                        MF_Spawn(scene, e->type, 0, 0);   /* TODO: 替換隨機座標 */
+                }
+
+                ++_ctrl.wave_idx;        /* 3) 指向下一波 */
+            } else {
+                /* 播完最後一波 → 重新循環（也可改成停住） */
+                _ctrl.wave_idx = 0;
+            }
+
+            _ctrl.wave_timer = INTERVAL; /* 重置倒數 */
         }
     } else {
-        /* 還有怪 → 維持倒數在 INTERVAL */
-        _ctrl.wave_timer = INTERVAL;
+        _ctrl.wave_timer = INTERVAL;     /* 場上還有怪，保持倒數凍結 */
     }
 }
+
 
 void MF_Reset(void)
 {
