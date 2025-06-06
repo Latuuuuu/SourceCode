@@ -7,10 +7,10 @@
 #include "../shapes/Rectangle.h"
 #include "../global.h"
 #include <math.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "../scene/gamescene.h"   /* ⬅️ 提供 Atk_L、tungtungtung_L... */
+#include "../scene/gamescene.h"   /* 提供 Atk_L、tungtungtung_L... */
 
 /* --------------------------------------------------
    追蹤 / 攻擊參數
@@ -20,7 +20,7 @@
 #define COOLDOWN_FRAMES  180      /* 60FPS → 3 秒  */
 #define BULLET_DAMAGE      40
 #define BULLET_SPEED       15.0f
-#define SHOT_RANGE  500.0f
+#define SHOT_RANGE        500.0f
 
 static void _trippi_troppi_update_position(Elements *self, int dx, int dy);
 
@@ -155,15 +155,27 @@ void trippi_troppi_destory(Elements *self)
 static void _trippi_troppi_update_position(Elements *self, int dx, int dy)
 {
     trippi_troppi *ch = self->pDerivedObj;
+
+    /* 1. 記錄舊座標 */
+    int old_x = ch->x;
+    int old_y = ch->y;
+
+    /* 2. 嘗試移動 */
     ch->x += dx;
     ch->y += dy;
 
+    /* 3. Clamp 到視窗內 */
     if (ch->x < 0)                       ch->x = 0;
     if (ch->y < 0)                       ch->y = 0;
     if (ch->x > WIDTH  - ch->width)      ch->x = WIDTH  - ch->width;
     if (ch->y > HEIGHT - ch->height)     ch->y = HEIGHT - ch->height;
 
+    /* 4. 計算真實位移量（防止 clamp 造成脫鉤） */
+    int real_dx = ch->x - old_x;
+    int real_dy = ch->y - old_y;
+
+    /* 5. 同步 hitbox 位置（此 API 接受 delta） */
     Shape *hb = ch->base.hitbox;
-    hb->update_center_x(hb, dx);
-    hb->update_center_y(hb, dy);
+    hb->update_center_x(hb, real_dx);
+    hb->update_center_y(hb, real_dy);
 }
