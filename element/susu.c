@@ -298,9 +298,9 @@ void susu_draw(Elements *self)
         al_play_sample_instance(chara->atk_Sound);
         //chara->state = STOP;
     }
-    Elements *hpbar;
+    /*Elements *hpbar;
     hpbar = New_Hpbar(Hpbar_L,chara->base.full_hp,chara->base.hp);
-    _Register_elements(scene,hpbar);
+    _Register_elements(scene,hpbar);*/
 }
 void susu_destroy(Elements *self)
 {

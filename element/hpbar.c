@@ -1,6 +1,6 @@
 #include "hpbar.h"
 #include "tree.h"
-#include "charater.h"
+#include "susu.h"
 #include "../shapes/Rectangle.h"
 #include "../scene/gamescene.h" // for element label
 #include "../scene/sceneManager.h" // for scene variable
@@ -24,6 +24,7 @@ Elements *New_Hpbar(int label,int full_hp, int now_hp)
                                      pDerivedObj->y,
                                      pDerivedObj->x+pDerivedObj->full_length*pDerivedObj->now_hp/pDerivedObj->full_hp,
                                     pDerivedObj->y);*/
+    pDerivedObj->font = al_create_builtin_font();
     // setting derived object function
     pObj->pDerivedObj = pDerivedObj;
     pObj->Update = Hpbar_update;
@@ -36,12 +37,9 @@ Elements *New_Hpbar(int label,int full_hp, int now_hp)
 }
 void Hpbar_update(Elements *self)
 {
-    /*Hpbar *Obj = ((Hpbar *)(self->pDerivedObj));
-    Shape *hitbox = Obj->hitbox;
-    hitbox->update_center_x(hitbox, mouse.x - Obj->x);
-    hitbox->update_center_y(hitbox, mouse.y - Obj->y);
-    Obj->x=mouse.x;
-    Obj->y=mouse.y;*/
+    Hpbar *hp = self->pDerivedObj;
+    Elements *chara = get_susu();
+    hp->now_hp = ((Damageable *)chara->pDerivedObj)->hp;
 }
 void _Hpbar_update_position(Elements *self, int dx, int dy)
 {
@@ -101,7 +99,7 @@ void Hpbar_draw(Elements *self)
     //al_draw_line(Obj->x,Obj->y+10,Obj->x+Obj->full_length*Obj->now_hp/Obj->full_hp,Obj->y+10,Obj->color,20);
     al_draw_filled_rectangle(Obj->x,Obj->y,Obj->x+Obj->full_length,Obj->y+20,al_map_rgb(215 ,200, 200));
     al_draw_filled_rectangle(Obj->x,Obj->y,Obj->x+Obj->full_length*Obj->now_hp/Obj->full_hp,Obj->y+20,Obj->color);
-    ALLEGRO_FONT *font = al_create_builtin_font();
+    //ALLEGRO_FONT *font = al_create_builtin_font();
     ALLEGRO_TRANSFORM old;
     al_copy_transform(&old, al_get_current_transform());
 
@@ -110,16 +108,18 @@ void Hpbar_draw(Elements *self)
     al_scale_transform(&tr, 2, 2);
     al_use_transform(&tr);
 
-    al_draw_textf(font,al_map_rgb(255 ,255, 255),(Obj->x+Obj->full_length+5)/2,(Obj->y+2)/2,ALLEGRO_ALIGN_LEFT," %d/%d ",Obj->now_hp,Obj->full_hp);
+    al_draw_textf(Obj->font,al_map_rgb(255 ,255, 255),(Obj->x+Obj->full_length+5)/2,(Obj->y+2)/2,ALLEGRO_ALIGN_LEFT," %d/%d ",Obj->now_hp,Obj->full_hp);
 
     al_use_transform(&old);   // 還原
-    al_destroy_font(font);
-    self->dele = true;
+    
+    //self->dele = true;
+    
 }
 void Hpbar_destroy(Elements *self)
 {
     Hpbar *Obj = ((Hpbar *)(self->pDerivedObj));
     //free(Obj->hitbox);
+    al_destroy_font(Obj->font);
     free(Obj);
     free(self);
 }

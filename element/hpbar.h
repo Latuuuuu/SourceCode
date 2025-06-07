@@ -12,7 +12,7 @@ typedef struct _Hpbar
     int x, y;          // the position of image
     int full_length;
     int full_hp,now_hp;
-    //ALLEGRO_FONT *font;
+    ALLEGRO_FONT *font;
     //Shape *hitbox; // the hitbox of object
     ALLEGRO_COLOR color;
 } Hpbar;

@@ -60,6 +60,7 @@ Scene *New_GameScene(int label)
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_susu(Susu_L));
+    _Register_elements(pObj, New_Hpbar(Hpbar_L,1000,1000));
     //_Register_elements(pObj, New_tungtungtung(tungtungtung_L));
     //_Register_elements(pObj, New_trippi_troppi(trippi_troppi_L));
 
