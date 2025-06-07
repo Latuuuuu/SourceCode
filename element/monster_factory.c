@@ -6,6 +6,7 @@
 #include "../element/trippi_troppi.h"
 #include "../element/element.h"
 #include "../element/capuccino.h"
+#include "../element/bananini.h"
 
 
 /* ---------------------------------------------------------
@@ -35,15 +36,23 @@ static const SpawnEntry wave1_entries[] = {
 };
 /* Wave 2 : 4 × tung , 2 × trippi */
 static const SpawnEntry wave2_entries[] = {
+    { MON_BANANINI, 4 },
+};
+
+/* Wave 3 : 4 × tung , 2 × trippi */
+static const SpawnEntry wave3_entries[] = {
     { MON_TUNGTUNGTUNG, 4 },
     { MON_TRIPPI_TROPPI, 2 },
 };
+
+
 
 /* 把每波統整在同一個陣列，方便用 wave_idx 存取 */
 static const Wave g_waves[] = {
     { wave0_entries, sizeof(wave0_entries)/sizeof(wave0_entries[0]) },
     { wave1_entries, sizeof(wave1_entries)/sizeof(wave1_entries[0]) },
     { wave2_entries, sizeof(wave2_entries)/sizeof(wave2_entries[0]) },
+    { wave3_entries, sizeof(wave3_entries)/sizeof(wave3_entries[0]) },
 };
 static const int g_wave_cnt = sizeof(g_waves)/sizeof(g_waves[0]);
 
@@ -68,7 +77,8 @@ static Elements *create_monster(MonsterType type, float x, float y)
         case MON_TRIPPI_TROPPI: return New_trippi_troppi(trippi_troppi_L);
         case MON_BALL:          return New_Ball(Ball_L);
         case MON_SUSU:          return New_susu(Susu_L);
-        case MON_CAPUCCINO:      return New_capuccino(capuccino_L);
+        case MON_CAPUCCINO:     return New_capuccino(capuccino_L);
+        case MON_BANANINI:      return New_bananini(bananini_L); 
         default:                return NULL;
     }
 }
@@ -85,6 +95,7 @@ static int count_alive_monsters(Scene *scene)
             case tungtungtung_L:
             case trippi_troppi_L:
             case capuccino_L:
+            case bananini_L:
                 ++cnt;
                 break;
             default:

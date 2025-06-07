@@ -11,6 +11,7 @@
 #include "../element/tungtungtung.h"
 #include "../element/trippi_troppi.h"
 #include "../element/capuccino.h"
+#include "../element/bananini.h"
 #include "../element/hpbar.h"
 #include "../global.h"
 #include <stdio.h>
