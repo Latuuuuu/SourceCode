@@ -5,6 +5,7 @@
 #include "../element/ball.h"
 #include "../element/trippi_troppi.h"
 #include "../element/element.h"
+#include "../element/capuccino.h"
 
 
 /* ---------------------------------------------------------
@@ -26,6 +27,7 @@ typedef struct {
 /* Wave 0 : 3 × tung */
 static const SpawnEntry wave0_entries[] = {
     { MON_TUNGTUNGTUNG, 3 },
+    {MON_CAPUCCINO, 5}
 };
 /* Wave 1 : 5 × trippi */
 static const SpawnEntry wave1_entries[] = {
@@ -66,6 +68,7 @@ static Elements *create_monster(MonsterType type, float x, float y)
         case MON_TRIPPI_TROPPI: return New_trippi_troppi(trippi_troppi_L);
         case MON_BALL:          return New_Ball(Ball_L);
         case MON_SUSU:          return New_susu(Susu_L);
+        case MON_CAPUCCINO:      return New_capuccino(capuccino_L);
         default:                return NULL;
     }
 }
@@ -81,6 +84,7 @@ static int count_alive_monsters(Scene *scene)
         switch (all.arr[i]->label) {
             case tungtungtung_L:
             case trippi_troppi_L:
+            case capuccino_L:
                 ++cnt;
                 break;
             default:
