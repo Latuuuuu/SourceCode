@@ -1,6 +1,6 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
-#include "tungtungtung.h"
+#include "capuccino.h"
 #include "susu.h"              /* 提供 get_susu() 介面 */
 #include "combat.h"            /* 近戰攻擊矩形 */
 #include "../scene/sceneManager.h"
@@ -19,21 +19,21 @@
 #define ARRIVE_EPSILON         60.0f  /* 抵達判定半徑 */
 #define ATTACK_DISTANCE        150.0f /* 自動攻擊距離 */
 #define ATTACK_COOLDOWN_FRAMES 120    /* 2 秒冷卻 (60 FPS * 2) */
-#define TUNG_ATTACK_DAMAGE    50     /* ← 在這裡調整攻擊力 */
+#define capuccino_ATTACK_DAMAGE    50     /* ← 在這裡調整攻擊力 */
 
 /* --------------------------------------------------
    建構函式
    --------------------------------------------------*/
-Elements *New_tungtungtung(int label)
+Elements *New_capuccino(int label)
 {
-    tungtungtung *pDerivedObj = malloc(sizeof(tungtungtung));
+    capuccino *pDerivedObj = malloc(sizeof(capuccino));
     Elements     *pObj        = New_Elements(label);
 
     /* 載入靜態貼圖 */
     const char *state_string[3] = {"stop", "move", "attack"};
     for (int i = 0; i < 3; ++i) {
         char buffer[64];
-        sprintf(buffer, "assets/image/tungtungtung_%s.png", state_string[i]);
+        sprintf(buffer, "assets/image/CapuccinoAssassino_%s.png", state_string[i]);
         pDerivedObj->img[i] = al_load_bitmap(buffer);
     }
 
@@ -70,10 +70,10 @@ Elements *New_tungtungtung(int label)
 
     /* 綁定多型函式 */
     pObj->pDerivedObj = pDerivedObj;
-    pObj->Draw        = tungtungtung_draw;
-    pObj->Update      = tungtungtung_update;
-    pObj->Interact    = tungtungtung_interact;
-    pObj->Destroy     = tungtungtung_destory;
+    pObj->Draw        = capuccino_draw;
+    pObj->Update      = capuccino_update;
+    pObj->Interact    = capuccino_interact;
+    pObj->Destroy     = capuccino_destory;
 
     return pObj;
 }
@@ -81,9 +81,9 @@ Elements *New_tungtungtung(int label)
 /* --------------------------------------------------
    每幀更新：固定速率追蹤 susu，近距離自動攻擊
    --------------------------------------------------*/
-void tungtungtung_update(Elements *self)
+void capuccino_update(Elements *self)
 {
-    tungtungtung *chara = self->pDerivedObj;
+    capuccino *chara = self->pDerivedObj;
 
     /* 攻擊冷卻倒數 */
     if (chara->attack_timer > 0) chara->attack_timer--;
@@ -108,7 +108,7 @@ void tungtungtung_update(Elements *self)
     if (dist > ARRIVE_EPSILON) {
         float vx = CHASE_SPEED * dx / dist;
         float vy = CHASE_SPEED * dy / dist;
-        _tungtungtung_update_position(self, (int)vx, (int)vy);
+        _capuccino_update_position(self, (int)vx, (int)vy);
         chara->dir   = (dx >= 0);
         if (chara->state != ATK) chara->state = MOVE;
     } else {
@@ -158,7 +158,7 @@ void tungtungtung_update(Elements *self)
         }
 
         /* 產生攻擊元素 */
-                Elements *atk = New_Combat(Combat_L, x1, y1, x2, y2, TUNG_ATTACK_DAMAGE, chara->base.side);
+                Elements *atk = New_Combat(Combat_L, x1, y1, x2, y2, capuccino_ATTACK_DAMAGE, chara->base.side);
         if (atk) _Register_elements(scene, atk);
 
         chara->state        = ATK;
@@ -174,9 +174,9 @@ void tungtungtung_update(Elements *self)
 /* --------------------------------------------------
    繪圖
    --------------------------------------------------*/
-void tungtungtung_draw(Elements *self)
+void capuccino_draw(Elements *self)
 {
-    tungtungtung *chara = self->pDerivedObj;
+    capuccino *chara = self->pDerivedObj;
     ALLEGRO_BITMAP *bmp = chara->img[chara->state];
     if (!bmp) return;
 
@@ -189,17 +189,17 @@ void tungtungtung_draw(Elements *self)
 /* --------------------------------------------------
    碰撞互動 (目前無特殊邏輯)
    --------------------------------------------------*/
-void tungtungtung_interact(Elements *self) {
+void capuccino_interact(Elements *self) {
     /* 預留 */
 }
 
 /* --------------------------------------------------
    釋放資源
    --------------------------------------------------*/
-void tungtungtung_destory(Elements *self)
+void capuccino_destory(Elements *self)
 {
     if (!self) return;
-    tungtungtung *chara = self->pDerivedObj;
+    capuccino *chara = self->pDerivedObj;
     for (int i = 0; i < 3; ++i) {
         if (chara->img[i]) al_destroy_bitmap(chara->img[i]);
     }
@@ -212,9 +212,9 @@ void tungtungtung_destory(Elements *self)
 /* --------------------------------------------------
    私有：位置同步與邊界限制
    --------------------------------------------------*/
-void _tungtungtung_update_position(Elements *self, int dx, int dy)
+void _capuccino_update_position(Elements *self, int dx, int dy)
 {
-    tungtungtung *chara = self->pDerivedObj;
+    capuccino *chara = self->pDerivedObj;
 
     chara->x += dx;
     chara->y += dy;

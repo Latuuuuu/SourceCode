@@ -105,6 +105,7 @@ void game_init(Game *self)
     // Initialize Allegro settings
     al_set_window_position(self->display, 0, 0);
     al_set_window_title(self->display, self->title);
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     // Register event
     al_register_event_source(event_queue, al_get_display_event_source(self->display)); // register display event
     al_register_event_source(event_queue, al_get_keyboard_event_source());             // register keyboard event

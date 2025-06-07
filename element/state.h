@@ -5,7 +5,8 @@ typedef enum {
     STOP = 0,
     MOVE,
     ATK,
-    COMBAT
+    COMBAT,
+    EARTHQUAKE
 } State;
 
 #endif /* STATE_H */

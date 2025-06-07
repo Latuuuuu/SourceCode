@@ -24,7 +24,7 @@ typedef struct _susu
     int width, height;              // the width and height of image
     int dir;                       // 1: face to right, 0: face to left, 2:face to up, 3:face to down
     int state;                      // the state of susu
-    ALGIF_ANIMATION *gif_status[4]; // gif for each state. 0: stop, 1: move, 2:attack
+    ALGIF_ANIMATION *gif_status[5]; // gif for each state. 0: stop, 1: move, 2:attack
     //ALLEGRO_BITMAP *img;
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
     int anime;      // counting the time of animation

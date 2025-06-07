@@ -6,6 +6,7 @@
 #include "projectile.h"
 #include "atk.h"
 #include "combat.h"
+#include "earthquake.h"
 #include "../global.h"
 #include "../scene/sceneManager.h"
 #include "../shapes/Rectangle.h"
@@ -32,8 +33,8 @@ Elements *New_susu(int label)
     Elements *pObj = New_Elements(label);
     // setting derived object member
     // load susu images
-    char state_string[4][10] = {"stop_2", "move_2", "attack_2","combat_2"};
-    for (int i = 0; i < 4; i++)
+    char state_string[5][10] = {"stop_2", "move_2", "attack_2","combat_2","earth_2"};
+    for (int i = 0; i < 5; i++)
     {
         char buffer[50];
         sprintf(buffer, "assets/image/chara_%s.gif", state_string[i]);
@@ -102,6 +103,10 @@ void susu_update(Elements *self)
         {
             chara->state = ATK;
         }
+        else if (key_state[ALLEGRO_KEY_E])
+        {
+            chara->state = EARTHQUAKE;
+        }
         else if (key_state[ALLEGRO_KEY_SPACE] && space==0)
         {
             if(chara->dir==0)  _susu_update_position(self, -1*move_dis*space_co, 0);
@@ -146,6 +151,10 @@ void susu_update(Elements *self)
         else if (key_state[ALLEGRO_KEY_Q])
         {
             chara->state = ATK;
+        }
+        else if (key_state[ALLEGRO_KEY_E])
+        {
+            chara->state = EARTHQUAKE;
         }
         else if (key_state[ALLEGRO_KEY_SPACE] && space==0)
         {
@@ -281,6 +290,21 @@ void susu_update(Elements *self)
             }
             chara->new_proj = true;
         }
+    }
+    else if(chara->state == EARTHQUAKE)
+    {
+        if (chara->gif_status[chara->state]->done)
+        {
+            chara->state = STOP;
+            chara->new_proj = false;
+        }
+        Elements *pro;
+        pro = New_Earthquake(Earthquake_L,chara->x + chara->width*0.5-192.0, chara->y + chara->height*0.5-100.0, 80, 0);                                      
+        if(pro)
+        {
+            _Register_elements(scene, pro);
+        }
+        chara->new_proj = true;
     }
 }
 void susu_draw(Elements *self)

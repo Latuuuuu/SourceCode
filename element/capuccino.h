@@ -1,5 +1,5 @@
-#ifndef tungtungtung_H_INCLUDED
-#define tungtungtung_H_INCLUDED
+#ifndef capuccino_H_INCLUDED
+#define capuccino_H_INCLUDED
 
 #include <allegro5/allegro_audio.h>
 #include "element.h"
@@ -10,7 +10,7 @@
 #include "state.h"
 
 /*
-   [tungtungtung object]
+   [capuccino object]
 */
 typedef struct
 {
@@ -24,13 +24,13 @@ typedef struct
     int  anime_time;
     bool new_proj;                  // 目前沒用，可保留
     int  attack_timer;              // ★ 個別冷卻計時器 (frame)
-} tungtungtung;
+} capuccino;
 
-Elements *New_tungtungtung(int label);
-void      tungtungtung_update(Elements *self);
-void      tungtungtung_interact(Elements *self);
-void      tungtungtung_draw(Elements *self);
-void      tungtungtung_destory(Elements *self);
-void      _tungtungtung_update_position(Elements *self, int dx, int dy);
+Elements *New_capuccino(int label);
+void      capuccino_update(Elements *self);
+void      capuccino_interact(Elements *self);
+void      capuccino_draw(Elements *self);
+void      capuccino_destory(Elements *self);
+void      _capuccino_update_position(Elements *self, int dx, int dy);
 
-#endif /* tungtungtung_H_INCLUDED */
+#endif /* capuccino_H_INCLUDED */

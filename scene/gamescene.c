@@ -10,6 +10,7 @@
 #include "../element/susu.h"
 #include "../element/tungtungtung.h"
 #include "../element/trippi_troppi.h"
+#include "../element/capuccino.h"
 #include "../element/hpbar.h"
 #include "../global.h"
 #include <stdio.h>
