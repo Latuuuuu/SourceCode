@@ -31,6 +31,7 @@ Elements *New_Combat(int label, int x1, int y1, int x2,int y2, int damage,int si
     pObj->inter_obj[pObj->inter_len++] = trippi_troppi_L;
     pObj->inter_obj[pObj->inter_len++] = capuccino_L;
     pObj->inter_obj[pObj->inter_len++] = bananini_L;
+    pObj->inter_obj[pObj->inter_len++] = patapim_L;
     // setting derived object function
     pObj->pDerivedObj = pDerivedObj;
     pObj->Update = Combat_update;

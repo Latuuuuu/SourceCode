@@ -7,6 +7,7 @@
 #include "../element/element.h"
 #include "../element/capuccino.h"
 #include "../element/bananini.h"
+#include "../element/patapim.h"
 
 
 /* ---------------------------------------------------------
@@ -27,16 +28,17 @@ typedef struct {
    --------------------------------------------------------- */
 /* Wave 0 : 3 × tung */
 static const SpawnEntry wave0_entries[] = {
-    { MON_TUNGTUNGTUNG, 3 },
-    {MON_CAPUCCINO, 5}
+    { MON_BANANINI, 2 },
+    { MON_TRIPPI_TROPPI, 5 },
 };
 /* Wave 1 : 5 × trippi */
 static const SpawnEntry wave1_entries[] = {
-    { MON_TRIPPI_TROPPI, 5 },
+   {MON_PATAPIM, 3},
 };
 /* Wave 2 : 4 × tung , 2 × trippi */
 static const SpawnEntry wave2_entries[] = {
-    { MON_BANANINI, 4 },
+    { MON_TUNGTUNGTUNG, 3 },
+    {MON_CAPUCCINO, 5},
 };
 
 /* Wave 3 : 4 × tung , 2 × trippi */
@@ -78,7 +80,8 @@ static Elements *create_monster(MonsterType type, float x, float y)
         case MON_BALL:          return New_Ball(Ball_L);
         case MON_SUSU:          return New_susu(Susu_L);
         case MON_CAPUCCINO:     return New_capuccino(capuccino_L);
-        case MON_BANANINI:      return New_bananini(bananini_L); 
+        case MON_BANANINI:      return New_bananini(bananini_L);
+        case MON_PATAPIM:       return New_patapim(patapim_L) ;
         default:                return NULL;
     }
 }
@@ -96,6 +99,7 @@ static int count_alive_monsters(Scene *scene)
             case trippi_troppi_L:
             case capuccino_L:
             case bananini_L:
+            case patapim_L:
                 ++cnt;
                 break;
             default:
