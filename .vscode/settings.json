@@ -19,6 +19,7 @@
 		"rectangle.h": "c",
 		"stdio.h": "c",
 		"circle.h": "c",
-		"global.h": "c"
+		"global.h": "c",
+		"scenemanager.h": "c"
 	}
 }

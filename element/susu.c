@@ -2,7 +2,7 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
 #include "susu.h"
-
+#include "hpbar.h"
 #include "projectile.h"
 #include "atk.h"
 #include "combat.h"
@@ -57,8 +57,9 @@ Elements *New_susu(int label)
     pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x,
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
-                                        pDerivedObj->y + pDerivedObj->height);                                    
-    pDerivedObj->base.hp=10000;
+                                        pDerivedObj->y + pDerivedObj->height);
+    pDerivedObj->base.hp=1000;                                    
+    pDerivedObj->base.full_hp=1000;
     pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
     // initial the animation component
@@ -70,9 +71,6 @@ Elements *New_susu(int label)
     pObj->Update = susu_update;
     pObj->Interact = susu_interact;
     pObj->Destroy = susu_destroy;
-
-
-
 
     singleton_susu = pObj; // CHANGED: save pointer to singleton
     return pObj;
@@ -300,6 +298,9 @@ void susu_draw(Elements *self)
         al_play_sample_instance(chara->atk_Sound);
         //chara->state = STOP;
     }
+    Elements *hpbar;
+    hpbar = New_Hpbar(Hpbar_L,chara->base.full_hp,chara->base.hp);
+    _Register_elements(scene,hpbar);
 }
 void susu_destroy(Elements *self)
 {

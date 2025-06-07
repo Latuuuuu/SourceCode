@@ -6,6 +6,7 @@
 typedef struct{
     int side; // 0 for susu, 1 for moster
     int hp;
+    int full_hp;
     Shape *hitbox;
 } Damageable;
 
