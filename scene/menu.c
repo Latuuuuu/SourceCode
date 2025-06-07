@@ -5,6 +5,7 @@
 #include <allegro5/allegro_ttf.h>
 #include "menu.h"
 #include <stdbool.h>
+ALLEGRO_BITMAP *enter_icon = NULL;
 /*
    [Menu function]
 */
@@ -35,6 +36,8 @@ Scene *New_Menu(int label)
 }
 void menu_update(Scene *self)
 {
+    if (!enter_icon)
+    enter_icon = al_load_bitmap("assets/image/enter.png");
     if (key_state[ALLEGRO_KEY_ENTER])
     {
         self->scene_end = true;
@@ -45,6 +48,7 @@ void menu_update(Scene *self)
 void menu_draw(Scene *self)
 {
     Menu *Obj = ((Menu *)(self->pDerivedObj));
+    al_draw_scaled_bitmap(enter_icon, 0, 0, al_get_bitmap_width(enter_icon), al_get_bitmap_height(enter_icon), 0, 0, WIDTH, HEIGHT, 0);
     al_draw_text(Obj->font, al_map_rgb(255, 255, 255), Obj->title_x, Obj->title_y, ALLEGRO_ALIGN_CENTRE, "Press 'Enter' to start");
     al_draw_rectangle(Obj->title_x - 150, Obj->title_y - 30, Obj->title_x + 150, Obj->title_y + 30, al_map_rgb(255, 255, 255), 0);
     al_play_sample_instance(Obj->sample_instance);
