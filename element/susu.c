@@ -59,8 +59,8 @@ Elements *New_susu(int label)
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
-    pDerivedObj->base.hp=1000;                                    
-    pDerivedObj->base.full_hp=1000;
+    pDerivedObj->base.hp=10000;                                    
+    pDerivedObj->base.full_hp=10000;
     pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
     // initial the animation component

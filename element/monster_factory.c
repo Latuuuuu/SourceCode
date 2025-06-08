@@ -31,26 +31,81 @@ typedef struct {
    --------------------------------------------------------- */
 /* Wave 0 : 3 × tung */
 static const SpawnEntry wave0_entries[] = {
-    { MON_BANANINI, 2 },
-    { MON_BIGTUNG, 2 },
-};
-/* Wave 1 : 5 × trippi */
-static const SpawnEntry wave1_entries[] = {
-   {MON_PATAPIM, 3},
-};
-/* Wave 2 : 4 × tung , 2 × trippi */
-static const SpawnEntry wave2_entries[] = {
     { MON_TUNGTUNGTUNG, 3 },
-    {MON_CAPUCCINO, 5},
+};
+/* Wave 1 : 5 × bananini */
+static const SpawnEntry wave1_entries[] = {
+   {MON_BANANINI, 5},
+};
+/* Wave 2 : 5 × tung , 3 × bananini */
+static const SpawnEntry wave2_entries[] = {
+    { MON_TUNGTUNGTUNG, 5 },
+    {MON_BANANINI, 3},
 };
 
-/* Wave 3 : 4 × tung , 2 × trippi */
+/* Wave 3 :patapim x 1, 2 × tung , 4 × bananini */
 static const SpawnEntry wave3_entries[] = {
-    { MON_TUNGTUNGTUNG, 4 },
-    { MON_TRIPPI_TROPPI, 2 },
+    { MON_TUNGTUNGTUNG, 2 },
+    { MON_BANANINI, 4 },
+    { MON_PATAPIM, 1 },
 };
 
+/* Wave 4 :level one complate */
+static const SpawnEntry wave4_entries[] = {
+    { MON_TUNGTUNGTUNG, 1 },
+};
 
+/* Wave 5 :trippi_troppi x 4, 2 × tung */
+static const SpawnEntry wave5_entries[] = {
+    { MON_TUNGTUNGTUNG, 2 },
+    { MON_TRIPPI_TROPPI, 4 },
+};
+
+/* Wave 6 :trippi_troppi x 5, 3 × bananini */
+static const SpawnEntry wave6_entries[] = {
+    { MON_BANANINI, 3 },
+    { MON_TRIPPI_TROPPI, 5 },
+};
+
+/* Wave 7 :trippi_troppi x 3, bananini x 3 , tralala x 1*/
+static const SpawnEntry wave7_entries[] = {
+    { MON_TRALALA, 1 },
+    { MON_TRIPPI_TROPPI, 3 },
+    { MON_BANANINI, 3},
+};
+
+/* Wave 8 : level two complete*/
+static const SpawnEntry wave8_entries[] = {
+    { MON_TUNGTUNGTUNG, 1 },
+};
+
+/* Wave 9 : assassino x 5*/
+static const SpawnEntry wave9_entries[] = {
+    { MON_CAPUCCINO, 5 },
+};
+
+/* Wave 10 :assassino x 3, bananini x 3*/
+static const SpawnEntry wave10_entries[] = {
+    { MON_CAPUCCINO, 3 },
+    { MON_BANANINI, 3},
+};
+
+/* Wave 11 :crocodilo x 1, assassino x 3 */
+static const SpawnEntry wave11_entries[] = {
+    { MON_CROCODILO, 1 },
+    { MON_CAPUCCINO, 3 },
+};
+
+/* Wave 12 : level three complete*/
+static const SpawnEntry wave12_entries[] = {
+    { MON_TUNGTUNGTUNG, 1 },
+};
+
+/* Wave 13 :bigtung x 1, tungtungtung x 10*/
+static const SpawnEntry wave13_entries[] = {
+    { MON_BIGTUNG, 1 },
+    { MON_TUNGTUNGTUNG, 10 },
+};
 
 /* 把每波統整在同一個陣列，方便用 wave_idx 存取 */
 static const Wave g_waves[] = {
@@ -58,6 +113,16 @@ static const Wave g_waves[] = {
     { wave1_entries, sizeof(wave1_entries)/sizeof(wave1_entries[0]) },
     { wave2_entries, sizeof(wave2_entries)/sizeof(wave2_entries[0]) },
     { wave3_entries, sizeof(wave3_entries)/sizeof(wave3_entries[0]) },
+    { wave4_entries, sizeof(wave4_entries)/sizeof(wave4_entries[0]) },
+    { wave5_entries, sizeof(wave5_entries)/sizeof(wave5_entries[0]) },
+    { wave6_entries, sizeof(wave6_entries)/sizeof(wave6_entries[0]) },
+    { wave7_entries, sizeof(wave7_entries)/sizeof(wave7_entries[0]) },
+    { wave8_entries, sizeof(wave8_entries)/sizeof(wave8_entries[0]) },
+    { wave9_entries, sizeof(wave9_entries)/sizeof(wave9_entries[0]) },
+    { wave10_entries, sizeof(wave10_entries)/sizeof(wave10_entries[0]) },
+    { wave11_entries, sizeof(wave11_entries)/sizeof(wave11_entries[0]) },
+    { wave12_entries, sizeof(wave12_entries)/sizeof(wave12_entries[0]) },
+    { wave13_entries, sizeof(wave13_entries)/sizeof(wave13_entries[0]) },
 };
 static const int g_wave_cnt = sizeof(g_waves)/sizeof(g_waves[0]);
 
