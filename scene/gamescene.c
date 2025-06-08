@@ -11,7 +11,12 @@
 #include "../element/tungtungtung.h"
 #include "../element/trippi_troppi.h"
 #include "../element/capuccino.h"
+#include "../element/bananini.h"
+#include "../element/patapim.h"
 #include "../element/hpbar.h"
+#include "../element/tralala.h"
+#include "../element/crocodilo.h"
+#include "../element/bigtung.h"
 #include "../global.h"
 #include <stdio.h>
 #include "../element/monster_factory.h"

@@ -20,7 +20,12 @@ typedef enum EleType
     Combat_L,
     Hpbar_L,
     capuccino_L,
-    Earthquake_L
+    Earthquake_L,
+    bananini_L,
+    patapim_L,
+    tralala_L,
+    crocodilo_L,
+    bigtung_L
 } EleType;
 
 typedef struct _GameScene
