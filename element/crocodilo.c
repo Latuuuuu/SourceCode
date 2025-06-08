@@ -18,7 +18,7 @@
 #define ARRIVE_EPSILON 200.0f
 #define COOLDOWN_FRAMES 180
 #define BULLET_DAMAGE   40
-#define BULLET_SPEED    15.0f
+#define BULLET_SPEED    7.0f
 #define SHOT_RANGE      800.0f
 static void _croco_update_position(Elements *self,int dx,int dy);
 
