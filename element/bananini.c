@@ -27,7 +27,7 @@ Elements *New_bananini(int label)
 {
     bananini *pD=malloc(sizeof(bananini));
     Elements *pE=New_Elements(label);
-    const char *state_s[3]={"stop","move","attack"};
+    const char *state_s[3]={"stop","move","atk"};
     for(int i=0;i<3;++i){
         char buf[64];
         sprintf(buf,"assets/image/ChimpanziniBananini_%s.png",state_s[i]);

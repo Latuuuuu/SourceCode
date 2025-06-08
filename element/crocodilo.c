@@ -15,11 +15,11 @@
 
 /* 參數與 Trippi 相同 */
 #define CHASE_SPEED     3.0f
-#define ARRIVE_EPSILON 60.0f
+#define ARRIVE_EPSILON 200.0f
 #define COOLDOWN_FRAMES 180
 #define BULLET_DAMAGE   40
 #define BULLET_SPEED    15.0f
-#define SHOT_RANGE      500.0f
+#define SHOT_RANGE      800.0f
 static void _croco_update_position(Elements *self,int dx,int dy);
 
 /* 建構（與 Trippi 類似，只換貼圖檔名） */
@@ -27,7 +27,7 @@ Elements *New_crocodilo(int label)
 {
     crocodilo *pD=malloc(sizeof(crocodilo));
     Elements  *pE=New_Elements(label);
-    const char *state_s[3]={"stop","move","attack"};
+    const char *state_s[3]={"stop","move","atk"};
     for(int i=0;i<3;++i){
         char buf[64];
         sprintf(buf,"assets/image/crocodilo_%s.png",state_s[i]);

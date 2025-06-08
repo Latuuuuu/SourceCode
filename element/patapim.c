@@ -25,7 +25,7 @@ Elements *New_patapim(int label) {
     patapim *pDerivedObj = malloc(sizeof(patapim));
     Elements *pObj = New_Elements(label);
 
-    const char *state_string[3] = {"stop", "move", "attack"};
+    const char *state_string[3] = {"stop", "move", "atk"};
     for (int i = 0; i < 3; ++i) {
         char buffer[64];
         sprintf(buffer, "assets/image/patapim_%s.png", state_string[i]);

@@ -30,7 +30,7 @@ Elements *New_tralala(int label)
     Elements     *pObj        = New_Elements(label);
 
     /* 載入靜態貼圖 */
-    const char *state_string[3] = {"stop", "move", "attack"};
+    const char *state_string[3] = {"stop", "move", "atk"};
     for (int i = 0; i < 3; ++i) {
         char buffer[64];
         sprintf(buffer, "assets/image/tralala_%s.png", state_string[i]);
