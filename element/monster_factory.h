@@ -12,7 +12,8 @@ typedef enum {
     MON_CAPUCCINO,
     MON_BANANINI,
     MON_PATAPIM,
-    MON_TRALALA
+    MON_TRALALA,
+    MON_CROCODILO
     // add new monsters here
 } MonsterType;
 

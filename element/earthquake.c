@@ -30,6 +30,7 @@ Elements *New_Earthquake(int label, int x, int y, int damage,int side)
     pObj->inter_obj[pObj->inter_len++] = patapim_L;
     pObj->inter_obj[pObj->inter_len++] = bananini_L;
     pObj->inter_obj[pObj->inter_len++] = tralala_L;
+    pObj->inter_obj[pObj->inter_len++] = crocodilo_L;
     // setting derived object function
     pObj->pDerivedObj = pDerivedObj;
     pObj->Update = Earthquake_update;

@@ -9,6 +9,7 @@
 #include "../element/bananini.h"
 #include "../element/patapim.h"
 #include "../element/tralala.h"
+#include "../element/crocodilo.h"
 
 
 /* ---------------------------------------------------------
@@ -31,6 +32,7 @@ typedef struct {
 static const SpawnEntry wave0_entries[] = {
     { MON_BANANINI, 2 },
     { MON_TRALALA, 2 },
+    {MON_CROCODILO, 2}
 };
 /* Wave 1 : 5 × trippi */
 static const SpawnEntry wave1_entries[] = {
@@ -84,6 +86,7 @@ static Elements *create_monster(MonsterType type, float x, float y)
         case MON_BANANINI:      return New_bananini(bananini_L);
         case MON_PATAPIM:       return New_patapim(patapim_L) ;
         case MON_TRALALA:       return New_tralala(tralala_L);
+        case MON_CROCODILO:     return New_crocodilo(crocodilo_L);
         default:                return NULL;
     }
 }
@@ -103,6 +106,7 @@ static int count_alive_monsters(Scene *scene)
             case bananini_L:
             case patapim_L:
             case tralala_L:
+            case crocodilo_L:
                 ++cnt;
                 break;
             default:
