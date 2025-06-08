@@ -22,7 +22,8 @@ typedef enum EleType
     capuccino_L,
     Earthquake_L,
     bananini_L,
-    patapim_L
+    patapim_L,
+    tralala_L
 } EleType;
 
 typedef struct _GameScene

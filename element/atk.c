@@ -33,6 +33,7 @@ Elements *New_Atk(int label, int x, int y, float vx,float vy, int damage,int sid
     pObj->inter_obj[pObj->inter_len++] = capuccino_L;
     pObj->inter_obj[pObj->inter_len++] = bananini_L;
     pObj->inter_obj[pObj->inter_len++] = patapim_L;
+    pObj->inter_obj[pObj->inter_len++] = tralala_L;
     // setting derived object function
     pObj->pDerivedObj = pDerivedObj;
     pObj->Update = Atk_update;

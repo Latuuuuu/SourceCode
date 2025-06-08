@@ -14,6 +14,7 @@
 #include "../element/bananini.h"
 #include "../element/patapim.h"
 #include "../element/hpbar.h"
+#include "../element/tralala.h"
 #include "../global.h"
 #include <stdio.h>
 #include "../element/monster_factory.h"
