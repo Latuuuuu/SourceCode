@@ -47,9 +47,8 @@ static const SpawnEntry wave2_entries[] = {
 
 /* Wave 3 :patapim x 1, 2 × tung , 4 × bananini */
 static const SpawnEntry wave3_entries[] = {
-    { MON_TUNGTUNGTUNG, 2 },
     { MON_BANANINI, 4 },
-    { MON_PATAPIM, 1 },
+    { MON_PATAPIM, 5 },
 };
 
 /* Wave 4 :level one complate */
