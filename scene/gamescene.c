@@ -11,7 +11,12 @@
 #include "../element/tungtungtung.h"
 #include "../element/trippi_troppi.h"
 #include "../element/capuccino.h"
+#include "../element/bananini.h"
+#include "../element/patapim.h"
 #include "../element/hpbar.h"
+#include "../element/tralala.h"
+#include "../element/crocodilo.h"
+#include "../element/bigtung.h"
 #include "../global.h"
 #include <stdio.h>
 #include "../element/monster_factory.h"
@@ -68,7 +73,7 @@ Scene *New_GameScene(int label)
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_susu(Susu_L));
-    _Register_elements(pObj, New_Hpbar(Hpbar_L,1000,1000));
+    _Register_elements(pObj, New_Hpbar(Hpbar_L,10000,10000));
     //_Register_elements(pObj, New_tungtungtung(tungtungtung_L));
     //_Register_elements(pObj, New_trippi_troppi(trippi_troppi_L));
 

@@ -11,9 +11,9 @@ typedef struct _Earthquake
     int x,y;          // the position of image
     int width, height; // the width and height of image
     //int vx,vy;             // the velocity of Earthquake
-
     int damage;
     int side;
+    int timer;
     ALLEGRO_BITMAP *img;
     Shape *hitbox; // the hitbox of object
 } Earthquake;

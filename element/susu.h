@@ -29,6 +29,7 @@ typedef struct _susu
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation
+    int e_timer,q_timer;
     bool new_proj;
     //Shape *hitbox; // the hitbox of object
 } susu;
