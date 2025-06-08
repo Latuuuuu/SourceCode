@@ -24,7 +24,8 @@ typedef enum EleType
     bananini_L,
     patapim_L,
     tralala_L,
-    crocodilo_L
+    crocodilo_L,
+    bigtung_L
 } EleType;
 
 typedef struct _GameScene

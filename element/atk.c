@@ -54,6 +54,7 @@ Elements *New_Atk(int label,
     pObj->inter_obj[pObj->inter_len++] = patapim_L;
     pObj->inter_obj[pObj->inter_len++] = tralala_L;
     pObj->inter_obj[pObj->inter_len++] = crocodilo_L;
+    pObj->inter_obj[pObj->inter_len++] = bigtung_L;
 
     /* 綁定函式 */
     pObj->pDerivedObj = pDerivedObj;
