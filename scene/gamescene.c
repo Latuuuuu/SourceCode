@@ -15,6 +15,13 @@
 #include "../global.h"
 #include <stdio.h>
 #include "../element/monster_factory.h"
+#include <allegro5/allegro_primitives.h>
+
+
+static bool is_paused = false;
+static int pause_option = 0; // 0 = Resume, 1 = Reset, 2 = Main Menu
+ALLEGRO_FONT *pause_font = NULL;
+
 void Load_Map_And_Generate_Tile(Scene *scene) {
     FILE *fp = fopen("assets/map/map.txt", "r");
     if (!fp) {
@@ -67,7 +74,7 @@ Scene *New_GameScene(int label)
 
     // initialise monster factory (optional reset)
     MF_Reset();
-
+    pause_font = al_load_ttf_font("assets/font/pirulen.ttf", 48, 0);
     // setting derived object function
     pObj->Update = game_scene_update;
     pObj->Draw = game_scene_draw;
@@ -77,6 +84,41 @@ Scene *New_GameScene(int label)
 
 void game_scene_update(Scene *self)
 {
+    if (key_state[ALLEGRO_KEY_ESCAPE]) {
+        is_paused = !is_paused;
+        key_state[ALLEGRO_KEY_ESCAPE] = false;
+    }
+
+    if (is_paused) {
+        if (key_state[ALLEGRO_KEY_UP])
+        {
+            pause_option = (pause_option + 2) % 3;
+            key_state[ALLEGRO_KEY_UP] = false;
+        }
+        if (key_state[ALLEGRO_KEY_DOWN])
+        {
+            pause_option = (pause_option + 1) % 3;
+            key_state[ALLEGRO_KEY_DOWN] = false;                
+        }
+        if (key_state[ALLEGRO_KEY_ENTER])
+        {
+            key_state[ALLEGRO_KEY_ENTER] = false;
+            if (pause_option == 0) is_paused = false;               // Resume
+            else if (pause_option == 1)
+            {                           // Reset
+                self->scene_end = true;
+                window = 1;
+                is_paused= false;                     // Reset the game
+            }
+            else if (pause_option == 2)
+            { 
+                is_paused=false;                         // Main Menu
+                self->scene_end = true;
+                window = 0;
+            }
+        }
+        return;
+    }
     double now = al_get_time();
     if (_prev_time == 0.0) _prev_time = now;
     double dt = now - _prev_time;
@@ -120,6 +162,14 @@ void game_scene_draw(Scene *self)
     for (int i = 0; i < allEle.len; i++) {
         Elements *ele = allEle.arr[i];
         ele->Draw(ele);
+    }
+    if (is_paused)
+    {
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));
+        al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2 - 80, ALLEGRO_ALIGN_CENTRE, "Paused");
+        al_draw_text(pause_font, pause_option == 0 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 0, ALLEGRO_ALIGN_CENTRE, "Continue");
+        al_draw_text(pause_font, pause_option == 1 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 60, ALLEGRO_ALIGN_CENTRE, "Reset");
+        al_draw_text(pause_font, pause_option == 2 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 120, ALLEGRO_ALIGN_CENTRE, "Main Menu");
     }
 }
 

@@ -16,7 +16,7 @@ Scene *New_Menu(int label)
     Menu *pDerivedObj = (Menu *)malloc(sizeof(Menu));
     Scene *pObj = New_Scene(label);
     // setting derived object member
-    pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 12, 0);
+    pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 15, 0);
     // Load sound
     pDerivedObj->song = al_load_sample("assets/sound/menu.mp3");
     al_reserve_samples(20);
@@ -53,9 +53,10 @@ void menu_draw(Scene *self)
 {
     Menu *Obj = ((Menu *)(self->pDerivedObj));
     al_draw_scaled_bitmap(enter_icon, 0, 0, al_get_bitmap_width(enter_icon), al_get_bitmap_height(enter_icon), 0, 0, WIDTH, HEIGHT, 0);
+    al_draw_filled_rectangle(Obj->title_x - WIDTH/2, Obj->title_y - HEIGHT/2, Obj->title_x + WIDTH/2, Obj->title_y + HEIGHT/2, al_map_rgba(255, 255, 255,60));
     al_draw_scaled_bitmap(character, 0, 0, al_get_bitmap_width(character), al_get_bitmap_height(character), 550, 400, 639, 960, 0);
+    al_draw_filled_rectangle(Obj->title_x - 150, Obj->title_y - 30-500, Obj->title_x + 150, Obj->title_y + 30-500, al_map_rgba(128, 128, 128, 128));
     al_draw_text(Obj->font, al_map_rgb(255, 255, 255), Obj->title_x, Obj->title_y-505, ALLEGRO_ALIGN_CENTRE, "Press 'Enter' to start");
-    al_draw_filled_rectangle(Obj->title_x - 150, Obj->title_y - 30-500, Obj->title_x + 150, Obj->title_y + 30-500, al_map_rgba(255, 255, 255,128));
     al_play_sample_instance(Obj->sample_instance);
 }
 void menu_destroy(Scene *self)
