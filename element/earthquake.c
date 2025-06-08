@@ -19,6 +19,7 @@ Elements *New_Earthquake(int label, int x, int y, int damage,int side)
     pDerivedObj->y = y;
     pDerivedObj->damage = damage;
     pDerivedObj->side = side;
+    pDerivedObj->timer = 30;
     pDerivedObj->hitbox = New_Circle(pDerivedObj->x + pDerivedObj->width / 2,
                                      pDerivedObj->y + pDerivedObj->height / 2,
                                      min(pDerivedObj->width, pDerivedObj->height) / 2);
@@ -38,6 +39,9 @@ Elements *New_Earthquake(int label, int x, int y, int damage,int side)
 }
 void Earthquake_update(Elements *self)
 {
+    Earthquake *earthquake = (Earthquake *)(self->pDerivedObj);
+    if(earthquake->timer>0) earthquake->timer --;
+    else self->dele = true;
     _Earthquake_update_position(self, 0, 0);
 }
 void _Earthquake_update_position(Elements *self, float dx, float dy)
@@ -67,7 +71,7 @@ void Earthquake_interact(Elements *self)
             }
         }
     }
-    self->dele = true;
+    //self->dele = true;
 }
 void Earthquake_draw(Elements *self)
 {

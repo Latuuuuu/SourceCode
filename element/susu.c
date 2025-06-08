@@ -59,13 +59,15 @@ Elements *New_susu(int label)
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
-    pDerivedObj->base.hp=1000;                                    
-    pDerivedObj->base.full_hp=1000;
+    pDerivedObj->base.hp=10000;                                    
+    pDerivedObj->base.full_hp=10000;
     pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
     // initial the animation component
     pDerivedObj->state = STOP;
     pDerivedObj->new_proj = false;
+    pDerivedObj->e_timer = 0;
+    pDerivedObj->q_timer = 0;
     pObj->pDerivedObj = pDerivedObj;
     // setting derived object function
     pObj->Draw = susu_draw;
@@ -83,7 +85,10 @@ Elements *New_susu(int label)
 void susu_update(Elements *self)
 {
     // use the idea of finite state machine to deal with different state
+    
     susu *chara = ((susu *)(self->pDerivedObj));
+    if(chara->e_timer>0)chara->e_timer--;
+    if(chara->q_timer>0)chara->q_timer--;
     int move_dis = 10;
     static bool space=0;
     int space_co = 15;
@@ -202,8 +207,9 @@ void susu_update(Elements *self)
             chara->state = STOP;
             chara->new_proj = false;
         }
-        if (chara->gif_status[ATK]->display_index == 2 && chara->new_proj == false)
+        if (chara->gif_status[ATK]->display_index == 2 && chara->new_proj == false && chara->q_timer <= 0)
         {
+            chara->q_timer=60;
             Elements *pro;
             float dx = mouse.x - (chara->x + chara->width*0.5);
             float dy = mouse.y - (chara->y + chara->height*0.5);
@@ -298,13 +304,14 @@ void susu_update(Elements *self)
             chara->state = STOP;
             chara->new_proj = false;
         }
-        Elements *pro;
-        pro = New_Earthquake(Earthquake_L,chara->x + chara->width*0.5-192.0, chara->y + chara->height*0.5-100.0, 80, 0);                                      
-        if(pro)
+        if (chara->gif_status[EARTHQUAKE]->display_index == 4 && chara->new_proj == false   && chara->e_timer <=0)
         {
-            _Register_elements(scene, pro);
+            chara->e_timer =60;
+            Elements *pro;
+            pro = New_Earthquake(Earthquake_L,chara->x + chara->width*0.5-192.0, chara->y + chara->height*0.5-100.0, 80, 0);                                      
+            if(pro)_Register_elements(scene, pro);
+            chara->new_proj = true;
         }
-        chara->new_proj = true;
     }
 }
 void susu_draw(Elements *self)
@@ -344,6 +351,10 @@ void susu_destroy(Elements *self)
 void _susu_update_position(Elements *self, int dx, int dy)
 {
     susu *chara = ((susu *)(self->pDerivedObj));
+    if(chara->x + chara->width*0.5 == 0 && dx <0) dx =0;
+    if(chara->x + chara->width*0.5 ==1800 && dx>0) dx =0;
+    if(chara->y + chara->height - 200 == 0 && dy<0) dy =0;
+    if(chara->y + chara->height == 1400 && dy>0) dy =0;
     chara->x += dx;
     chara->y += dy;
     Shape *hitbox = chara->base.hitbox;
