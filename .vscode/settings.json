@@ -20,6 +20,7 @@
 		"stdio.h": "c",
 		"circle.h": "c",
 		"global.h": "c",
-		"scenemanager.h": "c"
+		"scenemanager.h": "c",
+		"allegro_font.h": "c"
 	}
 }

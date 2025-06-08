@@ -31,4 +31,10 @@ void MF_Reset(void);
 /* Free any resources owned by the factory. */
 void MF_Destroy(void);
 
+bool MF_NextWaveIsBuffer(void);
+
+void MF_SkipBufferWave(void);
+
+int MF_AliveMonsterCount(Scene *scene);
+
 #endif

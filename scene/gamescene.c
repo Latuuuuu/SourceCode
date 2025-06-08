@@ -17,6 +17,7 @@
 #include "../element/tralala.h"
 #include "../element/crocodilo.h"
 #include "../element/bigtung.h"
+#include "../element/level_switch.h"
 #include "../global.h"
 #include <stdio.h>
 #include "../element/monster_factory.h"
@@ -79,6 +80,7 @@ Scene *New_GameScene(int label)
 
     // initialise monster factory (optional reset)
     MF_Reset();
+    Level_switch_Init();
     pause_font = al_load_ttf_font("assets/font/pirulen.ttf", 48, 0);
     // setting derived object function
     pObj->Update = game_scene_update;
@@ -130,7 +132,9 @@ void game_scene_update(Scene *self)
     _prev_time = now;
 
     // let factory decide whether to spawn monsters this frame
-    MF_Update(self, dt);
+    //MF_Update(self, dt);
+    Level_switch_Update(self, dt);
+
 
     // update every element
     ElementVec allEle = _Get_all_elements(self);
@@ -168,6 +172,7 @@ void game_scene_draw(Scene *self)
         Elements *ele = allEle.arr[i];
         ele->Draw(ele);
     }
+    Level_switch_DrawOverlay();
     if (is_paused)
     {
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));

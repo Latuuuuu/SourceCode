@@ -19,11 +19,13 @@
 typedef struct {
     MonsterType type;   /* 怪物種類 */
     int         count;  /* 數量     */
+    bool        is_buffer;  /* 切關緩衝 */
 } SpawnEntry;
 
 typedef struct {
     const SpawnEntry *entries; /* 指向本波的 SpawnEntry 陣列 */
     int               entry_num;
+    bool              is_buffer;
 } Wave;
 
 /* ---------------------------------------------------------
@@ -109,20 +111,20 @@ static const SpawnEntry wave13_entries[] = {
 
 /* 把每波統整在同一個陣列，方便用 wave_idx 存取 */
 static const Wave g_waves[] = {
-    { wave0_entries, sizeof(wave0_entries)/sizeof(wave0_entries[0]) },
-    { wave1_entries, sizeof(wave1_entries)/sizeof(wave1_entries[0]) },
-    { wave2_entries, sizeof(wave2_entries)/sizeof(wave2_entries[0]) },
-    { wave3_entries, sizeof(wave3_entries)/sizeof(wave3_entries[0]) },
-    { wave4_entries, sizeof(wave4_entries)/sizeof(wave4_entries[0]) },
-    { wave5_entries, sizeof(wave5_entries)/sizeof(wave5_entries[0]) },
-    { wave6_entries, sizeof(wave6_entries)/sizeof(wave6_entries[0]) },
-    { wave7_entries, sizeof(wave7_entries)/sizeof(wave7_entries[0]) },
-    { wave8_entries, sizeof(wave8_entries)/sizeof(wave8_entries[0]) },
-    { wave9_entries, sizeof(wave9_entries)/sizeof(wave9_entries[0]) },
-    { wave10_entries, sizeof(wave10_entries)/sizeof(wave10_entries[0]) },
-    { wave11_entries, sizeof(wave11_entries)/sizeof(wave11_entries[0]) },
-    { wave12_entries, sizeof(wave12_entries)/sizeof(wave12_entries[0]) },
-    { wave13_entries, sizeof(wave13_entries)/sizeof(wave13_entries[0]) },
+    { wave0_entries, sizeof(wave0_entries)/sizeof(wave0_entries[0]) ,false},
+    { wave1_entries, sizeof(wave1_entries)/sizeof(wave1_entries[0]) ,false},
+    { wave2_entries, sizeof(wave2_entries)/sizeof(wave2_entries[0]) ,false},
+    { wave3_entries, sizeof(wave3_entries)/sizeof(wave3_entries[0]) ,false},
+    { wave4_entries, sizeof(wave4_entries)/sizeof(wave4_entries[0]) ,true},
+    { wave5_entries, sizeof(wave5_entries)/sizeof(wave5_entries[0]) ,false},
+    { wave6_entries, sizeof(wave6_entries)/sizeof(wave6_entries[0]) ,false},
+    { wave7_entries, sizeof(wave7_entries)/sizeof(wave7_entries[0]) ,false},
+    { wave8_entries, sizeof(wave8_entries)/sizeof(wave8_entries[0]) ,true},
+    { wave9_entries, sizeof(wave9_entries)/sizeof(wave9_entries[0]) ,false},
+    { wave10_entries, sizeof(wave10_entries)/sizeof(wave10_entries[0]) ,false},
+    { wave11_entries, sizeof(wave11_entries)/sizeof(wave11_entries[0]) ,false},
+    { wave12_entries, sizeof(wave12_entries)/sizeof(wave12_entries[0]) ,true},
+    { wave13_entries, sizeof(wave13_entries)/sizeof(wave13_entries[0]) ,false},
 };
 static const int g_wave_cnt = sizeof(g_waves)/sizeof(g_waves[0]);
 
@@ -236,4 +238,20 @@ void MF_Reset(void)
 void MF_Destroy(void)
 {
     /* 未配置資源，留空 */
+}
+
+bool MF_NextWaveIsBuffer(void)
+{
+    return (_ctrl.wave_idx < g_wave_cnt) ? g_waves[_ctrl.wave_idx].is_buffer : false;
+}
+void MF_SkipBufferWave(void)
+{
+    if (_ctrl.wave_idx < g_wave_cnt && g_waves[_ctrl.wave_idx].is_buffer)
+        ++_ctrl.wave_idx;           /* 跳過佔位波 */
+}
+
+/* 暴露場上活怪數量，供 LevelFSM 判斷 */
+int MF_AliveMonsterCount(Scene *scene)
+{
+    return count_alive_monsters(scene); /* 原本的 static 函式 */
 }
