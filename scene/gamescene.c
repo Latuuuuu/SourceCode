@@ -186,6 +186,7 @@ void game_scene_draw(Scene *self)
 void game_scene_destroy(Scene *self)
 {
     MF_Destroy(); // clean up factory‑related resources
+    Level_switch_Destroy();
 
     GameScene *Obj = ((GameScene *)(self->pDerivedObj));
     ALLEGRO_BITMAP *background = Obj->background;

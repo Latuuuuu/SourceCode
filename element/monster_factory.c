@@ -31,9 +31,17 @@ typedef struct {
 /* ---------------------------------------------------------
    這是你的波次腳本 (只改這裡就可以增刪波次)
    --------------------------------------------------------- */
+static const SpawnEntry wave000_entries[] = {
+};
+static const SpawnEntry wave00_entries[] = {
+};
 /* Wave 0 : 3 × tung */
 static const SpawnEntry wave0_entries[] = {
     { MON_TUNGTUNGTUNG, 3 },
+};
+/* Wave 0.5 : 1 × tung */
+static const SpawnEntry wave05_entries[] = {
+    { MON_TUNGTUNGTUNG, 1 },
 };
 /* Wave 1 : 5 × bananini */
 static const SpawnEntry wave1_entries[] = {
@@ -111,7 +119,10 @@ static const SpawnEntry wave13_entries[] = {
 
 /* 把每波統整在同一個陣列，方便用 wave_idx 存取 */
 static const Wave g_waves[] = {
+    { wave000_entries, sizeof(wave000_entries)/sizeof(wave000_entries[0]) ,false},
+    { wave00_entries, sizeof(wave00_entries)/sizeof(wave00_entries[0]) ,true},
     { wave0_entries, sizeof(wave0_entries)/sizeof(wave0_entries[0]) ,false},
+    { wave05_entries, sizeof(wave05_entries)/sizeof(wave05_entries[0]) ,true},
     { wave1_entries, sizeof(wave1_entries)/sizeof(wave1_entries[0]) ,false},
     { wave2_entries, sizeof(wave2_entries)/sizeof(wave2_entries[0]) ,false},
     { wave3_entries, sizeof(wave3_entries)/sizeof(wave3_entries[0]) ,false},
