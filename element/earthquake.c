@@ -27,7 +27,7 @@ Elements *New_Earthquake(int label, int x, int y, int damage,int side)
     pObj->inter_obj[pObj->inter_len++] = tungtungtung_L;
     pObj->inter_obj[pObj->inter_len++] = Susu_L;
     pObj->inter_obj[pObj->inter_len++] = trippi_troppi_L;
-    pObj->inter_obj[pObj->inter_len++] = capuccino_L;
+    //pObj->inter_obj[pObj->inter_len++] = capuccino_L;
     pObj->inter_obj[pObj->inter_len++] = patapim_L;
     pObj->inter_obj[pObj->inter_len++] = bananini_L;
     pObj->inter_obj[pObj->inter_len++] = tralala_L;

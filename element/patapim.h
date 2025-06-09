@@ -4,26 +4,26 @@
 #include <allegro5/allegro_audio.h>
 #include "element.h"
 #include "damageable.h"
+#include "state.h"
 #include "../shapes/Shape.h"
 #include "../algif5/algif.h"
 #include <stdbool.h>
-#include "state.h"
 
 /*
    [patapim object]
 */
-typedef struct
-{
+typedef struct {
     Damageable base;
     int  x, y;
-    int  width, height;             // image size
-    bool dir;                       // true: face right
-    int  state;                     // STOP / MOVE / ATTACK
-    ALLEGRO_BITMAP *img[3];         // 0:stop 1:move 2:attack
-    int  anime;                     // (若日後要做動圖可留)
+    int  width, height;
+    bool dir;
+    int  state;
+    ALLEGRO_BITMAP *img[3];
+    int  anime;
     int  anime_time;
-    bool new_proj;                  // 目前沒用，可保留
-    int  attack_timer;              // ★ 個別冷卻計時器 (frame)
+    bool new_proj;
+    int  attack_timer;
+    int  quake_timer; // ★ 新增：地震攻擊冷卻時間
 } patapim;
 
 Elements *New_patapim(int label);

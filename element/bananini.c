@@ -18,7 +18,7 @@
 #define ARRIVE_EPSILON 60.0f
 #define COOLDOWN_FRAMES 180
 #define BULLET_DAMAGE   40
-#define BULLET_SPEED    15.0f
+#define BULLET_SPEED    3.0f
 #define SHOT_RANGE      500.0f
 static void _banana_update_position(Elements *self,int dx,int dy);
 
@@ -27,7 +27,7 @@ Elements *New_bananini(int label)
 {
     bananini *pD=malloc(sizeof(bananini));
     Elements *pE=New_Elements(label);
-    const char *state_s[3]={"stop","move","attack"};
+    const char *state_s[3]={"stop","move","atk"};
     for(int i=0;i<3;++i){
         char buf[64];
         sprintf(buf,"assets/image/ChimpanziniBananini_%s.png",state_s[i]);

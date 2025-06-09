@@ -18,7 +18,7 @@
 #define ARRIVE_EPSILON 60.0f
 #define COOLDOWN_FRAMES 180
 #define BULLET_DAMAGE   40
-#define BULLET_SPEED    15.0f
+#define BULLET_SPEED    3.0f
 #define SHOT_RANGE      500.0f
 
 static void _trippi_update_position(Elements *self, int dx, int dy);
@@ -29,7 +29,7 @@ Elements *New_trippi_troppi(int label)
     trippi_troppi *pD = malloc(sizeof(trippi_troppi));
     Elements      *pE = New_Elements(label);
 
-    const char *state_s[3] = {"stop","move","attack"};
+    const char *state_s[3] = {"stop","move","atk"};
     for (int i=0;i<3;++i){
         char buf[64]; sprintf(buf,"assets/image/Trippi-Troppi_%s.png",state_s[i]);
         pD->img[i] = al_load_bitmap(buf);
