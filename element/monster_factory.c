@@ -37,7 +37,7 @@ static const SpawnEntry wave00_entries[] = {
 };
 /* Wave 0 : 3 × tung */
 static const SpawnEntry wave0_entries[] = {
-    { MON_CROCODILO, 1 },
+    { MON_TRALALA, 1 },
 };
 /* Wave 0.5 : 1 × tung */
 static const SpawnEntry wave05_entries[] = {
