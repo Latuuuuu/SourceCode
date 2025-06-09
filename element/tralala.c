@@ -21,8 +21,8 @@
 #define ATTACK_COOLDOWN_FRAMES 120
 #define TRALALA_ATTACK_DAMAGE   50
 
-#define EARTHQUAKE_RANGE       250.0f  /* 觸發距離 */
-#define EARTHQUAKE_COOLDOWN    300     /* 5 秒 */
+#define EARTHQUAKE_RANGE       600.0f  /* 觸發距離 */
+#define EARTHQUAKE_COOLDOWN    120     /* 2 秒 */
 #define EARTHQUAKE_DAMAGE       15
 
 /* ---------------- 建構 ---------------- */
