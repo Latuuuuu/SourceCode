@@ -143,6 +143,10 @@ void game_scene_update(Scene *self)
             if (pause_option == 0) is_paused = false;               // Resume
             else if (pause_option == 1)
             {                           // Reset
+                for(int i=0;i<5;i++)
+                {
+                    switch_level[i]=0; // Reset the level switch
+                }
                 self->scene_end = true;
                 window = 1;
                 is_paused= false;                     // Reset the game
@@ -196,7 +200,6 @@ void game_scene_draw(Scene *self)
     //         al_draw_bitmap(tile, x * TILE_SIZE, y * TILE_SIZE, 0);
     //     }
     // }
-
     if(level_no<=1)
     {
         if(!switch_level[0])
