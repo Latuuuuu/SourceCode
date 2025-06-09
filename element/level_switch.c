@@ -75,7 +75,7 @@ void Level_switch_DrawOverlay(void)
     {
         susu *chara = ((susu *)(get_susu()->pDerivedObj));
         chara->base.hp = chara->base.full_hp;
-        chara->damage*=1.5;
+        chara->damage+=10;
         level_up =1;
     }
     
