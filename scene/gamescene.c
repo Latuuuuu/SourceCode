@@ -30,6 +30,7 @@ ALLEGRO_FONT *pause_font = NULL;
 ALLEGRO_BITMAP *game_background = NULL;
 static bool is_dead = 0;
 int switch_level[5]={0};
+static bool is_win = 0;
 
 void Load_Map_And_Generate_Tile(Scene *scene) {
     FILE *fp = fopen("assets/map/map.txt", "r");
@@ -96,12 +97,16 @@ Scene *New_GameScene(int label)
 
 void game_scene_update(Scene *self)
 {
+    if(is_over())
+    {
+        is_win=1;
+    }
     susu *chara = ((susu *)(get_susu()->pDerivedObj));
     if (chara->base.hp <= 0)
     {
         is_dead = 1;
     }
-    if(is_dead)
+    if(is_dead || is_win)
     {
         if (key_state[ALLEGRO_KEY_ENTER])
         {
@@ -109,7 +114,9 @@ void game_scene_update(Scene *self)
             chara->base.hp = chara->base.full_hp;
             window = 0;
             is_dead=0;
+            is_win=0;
             return;
+
         }
     }
 
@@ -253,6 +260,12 @@ void game_scene_draw(Scene *self)
     {
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));
         al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2 - 150, ALLEGRO_ALIGN_CENTRE, "HaHa");
+        al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Press Enter to return to menu");
+    }
+    if(is_win)
+    {
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));
+        al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2 - 150, ALLEGRO_ALIGN_CENTRE, "CONGRATULATION");
         al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Press Enter to return to menu");
     }
 }
