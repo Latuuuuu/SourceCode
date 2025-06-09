@@ -3,7 +3,7 @@
 #include "../scene/scene.h"
 
 typedef enum { LVL_RUNNING, LVL_TRANSITION, LVL_FINISHED } LevelState;
-
+static int level_no; 
 void Level_switch_Init(void);
 void Level_switch_Update(Scene *scene, double dt);
 void Level_switch_DrawOverlay(void);

@@ -8,8 +8,7 @@
     #include "../global.h"
 
     static LevelState state = LVL_RUNNING;
-    static double     trans_timer = 0.0;
-    static int        level_no = 0;               
+    static double     trans_timer = 0.0;              
     static ALLEGRO_FONT *level_font = NULL;
     static ALLEGRO_FONT *story_font = NULL;
     static ALLEGRO_BITMAP *intro_img = NULL; 

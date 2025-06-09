@@ -27,7 +27,9 @@
 static bool is_paused = false;
 static int pause_option = 0; // 0 = Resume, 1 = Reset, 2 = Main Menu
 ALLEGRO_FONT *pause_font = NULL;
+ALLEGRO_BITMAP *game_background = NULL;
 static bool is_dead = 0;
+int switch_level[5]={0};
 
 void Load_Map_And_Generate_Tile(Scene *scene) {
     FILE *fp = fopen("assets/map/map.txt", "r");
@@ -97,7 +99,7 @@ void game_scene_update(Scene *self)
     susu *chara = ((susu *)(get_susu()->pDerivedObj));
     if (chara->base.hp <= 0)
     {
-        is_dead =1;
+        is_dead = 1;
     }
     if(is_dead)
     {
@@ -107,8 +109,10 @@ void game_scene_update(Scene *self)
             chara->base.hp = chara->base.full_hp;
             window = 0;
             is_dead=0;
+            return;
         }
     }
+
     if (key_state[ALLEGRO_KEY_ESCAPE]) {
         is_paused = !is_paused;
         key_state[ALLEGRO_KEY_ESCAPE] = false;
@@ -178,13 +182,59 @@ void game_scene_draw(Scene *self)
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
     // draw map tiles
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
-            ALLEGRO_BITMAP *tile = (map[y][x] == 1) ? wall_tile : floor_tile;
-            al_draw_bitmap(tile, x * TILE_SIZE, y * TILE_SIZE, 0);
+    // for (int y = 0; y < MAP_HEIGHT; y++) {
+    //     for (int x = 0; x < MAP_WIDTH; x++) {
+    //         ALLEGRO_BITMAP *tile = (map[y][x] == 1) ? wall_tile : floor_tile;
+    //         al_draw_bitmap(tile, x * TILE_SIZE, y * TILE_SIZE, 0);
+    //     }
+    // }
+
+    if(level_no<=1)
+    {
+        if(!switch_level[0])
+        {
+            printf("switch level 0\n");
+            switch_level[0]=1;
+            game_background = al_load_bitmap("assets/image/level0.png");            
         }
     }
-
+    else if(level_no==2)
+    {
+        if(!switch_level[1])
+        {
+            printf("switch level 1\n");
+            switch_level[1]=1;
+            game_background = al_load_bitmap("assets/image/level1.png");            
+        }
+    }
+    else if(level_no==3)
+    {
+        if(!switch_level[2])
+        {
+            printf("switch level 2\n");
+            switch_level[2]=1;
+            game_background = al_load_bitmap("assets/image/level2.png");            
+        }
+    }
+    else if(level_no==4)
+    {
+        if(!switch_level[3])
+        {
+            printf("switch level 3\n");
+            switch_level[3]=1;
+            game_background = al_load_bitmap("assets/image/level3.png");            
+        }
+    }
+    else if(level_no==5)
+    {
+        if(!switch_level[4])
+        {
+            printf("switch level 4\n");
+            switch_level[4]=1;
+            game_background = al_load_bitmap("assets/image/level3.png");            
+        }
+    }
+    al_draw_scaled_bitmap(game_background, 0, 0, al_get_bitmap_width(game_background), al_get_bitmap_height(game_background), 0, 0, WIDTH, HEIGHT, 0);
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++) {
         Elements *ele = allEle.arr[i];
