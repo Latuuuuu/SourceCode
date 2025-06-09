@@ -115,7 +115,8 @@ static const SpawnEntry wave13_entries[] = {
     { MON_BIGTUNG, 1 },
     { MON_TUNGTUNGTUNG, 10 },
 };
-
+static const SpawnEntry wave14_entries[] = {
+};
 /* 把每波統整在同一個陣列，方便用 wave_idx 存取 */
 static const Wave g_waves[] = {
     { wave000_entries, sizeof(wave000_entries)/sizeof(wave000_entries[0]) ,false},
@@ -135,6 +136,7 @@ static const Wave g_waves[] = {
     { wave11_entries, sizeof(wave11_entries)/sizeof(wave11_entries[0]) ,false},
     { wave12_entries, sizeof(wave12_entries)/sizeof(wave12_entries[0]) ,true},
     { wave13_entries, sizeof(wave13_entries)/sizeof(wave13_entries[0]) ,false},
+    { wave14_entries, sizeof(wave14_entries)/sizeof(wave14_entries[0]) ,true},
 };
 static const int g_wave_cnt = sizeof(g_waves)/sizeof(g_waves[0]);
 
