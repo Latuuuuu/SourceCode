@@ -55,14 +55,15 @@ Elements *New_susu(int label)
     pDerivedObj->height = pDerivedObj->gif_status[0]->height;
     pDerivedObj->x = 300;
     pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
-    pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x,
-                                        pDerivedObj->y,
-                                        pDerivedObj->x + pDerivedObj->width,
-                                        pDerivedObj->y + pDerivedObj->height);
+    pDerivedObj->base.hitbox = New_Rectangle(pDerivedObj->x+200,
+                                        pDerivedObj->y+50,
+                                        pDerivedObj->x + pDerivedObj->width-200,
+                                        pDerivedObj->y + pDerivedObj->height-50);
     pDerivedObj->base.hp=10000;                                    
     pDerivedObj->base.full_hp=10000;
     pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
+    pDerivedObj->damage = 80;
     // initial the animation component
     pDerivedObj->state = STOP;
     pDerivedObj->new_proj = false;
@@ -223,7 +224,7 @@ void susu_update(Elements *self)
             float speed = 25.0;
             float vx = speed * dx / len;
             float vy = speed * dy / len;
-            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0, chara->y + chara->height*0.5 - 70.0,vx,vy,80,0);                                      
+            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0, chara->y + chara->height*0.5 - 70.0,vx,vy,chara->damage,0);                                      
             if(pro)
             {
                 _Register_elements(scene, pro);
@@ -289,7 +290,7 @@ void susu_update(Elements *self)
                     break;
             }
 
-            pro = New_Combat(Combat_L, x1, y1, x2, y2, 80, 0);                                      
+            pro = New_Combat(Combat_L, x1, y1, x2, y2, chara->damage, 0);                                      
             if(pro)
             {
                 _Register_elements(scene, pro);
@@ -308,7 +309,7 @@ void susu_update(Elements *self)
         {
             chara->e_timer =60;
             Elements *pro;
-            pro = New_Earthquake(Earthquake_L,chara->x + chara->width*0.5-192.0, chara->y + chara->height*0.5-100.0, 80, 0);                                      
+            pro = New_Earthquake(Earthquake_L,chara->x + chara->width*0.5-192.0, chara->y + chara->height*0.5-100.0, chara->damage, 0);                                      
             if(pro)_Register_elements(scene, pro);
             chara->new_proj = true;
         }

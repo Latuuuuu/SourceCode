@@ -31,7 +31,7 @@ typedef struct {
 /* ---------------------------------------------------------
    這是你的波次腳本 (只改這裡就可以增刪波次)
    --------------------------------------------------------- */
-static const SpawnEntry wave000_entries[] = {
+static const SpawnEntry wave000_entries[] = { //用來跳過的
 };
 static const SpawnEntry wave00_entries[] = {
 };
