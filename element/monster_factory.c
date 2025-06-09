@@ -33,7 +33,7 @@ typedef struct {
    --------------------------------------------------------- */
 /* Wave 0 : 3 × tung */
 static const SpawnEntry wave0_entries[] = {
-    { MON_TUNGTUNGTUNG, 3 },
+    { MON_TRALALA, 1 },
 };
 /* Wave 1 : 5 × bananini */
 static const SpawnEntry wave1_entries[] = {

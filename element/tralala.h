@@ -24,6 +24,7 @@ typedef struct
     int  anime_time;
     bool new_proj;                  // 目前沒用，可保留
     int  attack_timer;              // ★ 個別冷卻計時器 (frame)
+    int quake_timer;
 } tralala;
 
 Elements *New_tralala(int label);
