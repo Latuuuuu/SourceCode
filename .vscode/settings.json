@@ -21,6 +21,7 @@
 		"circle.h": "c",
 		"global.h": "c",
 		"scenemanager.h": "c",
-		"allegro_font.h": "c"
+		"allegro_font.h": "c",
+		"monster_factory.h": "c"
 	}
 }

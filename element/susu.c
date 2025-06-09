@@ -59,8 +59,8 @@ Elements *New_susu(int label)
                                         pDerivedObj->y+50,
                                         pDerivedObj->x + pDerivedObj->width-200,
                                         pDerivedObj->y + pDerivedObj->height-50);
-    pDerivedObj->base.hp=10000;                                    
-    pDerivedObj->base.full_hp=10000;
+    pDerivedObj->base.hp=100;                                    
+    pDerivedObj->base.full_hp=100;
     pDerivedObj->base.side=0;
     pDerivedObj->dir = false; // true: face to right, false: face to left
     pDerivedObj->damage = 80;

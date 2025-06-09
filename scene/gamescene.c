@@ -27,6 +27,7 @@
 static bool is_paused = false;
 static int pause_option = 0; // 0 = Resume, 1 = Reset, 2 = Main Menu
 ALLEGRO_FONT *pause_font = NULL;
+static bool is_dead = 0;
 
 void Load_Map_And_Generate_Tile(Scene *scene) {
     FILE *fp = fopen("assets/map/map.txt", "r");
@@ -64,6 +65,7 @@ Scene *New_GameScene(int label)
 {
     GameScene *pDerivedObj = (GameScene *)malloc(sizeof(GameScene));
     Scene *pObj = New_Scene(label);
+    
     // setting derived object member
     pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");
     pObj->pDerivedObj = pDerivedObj;
@@ -74,7 +76,8 @@ Scene *New_GameScene(int label)
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_susu(Susu_L));
-    _Register_elements(pObj, New_Hpbar(Hpbar_L,10000,10000));
+    susu *chara = ((susu *)(get_susu()->pDerivedObj));
+    _Register_elements(pObj, New_Hpbar(Hpbar_L,chara->base.full_hp,chara->base.hp));
     //_Register_elements(pObj, New_tungtungtung(tungtungtung_L));
     //_Register_elements(pObj, New_trippi_troppi(trippi_troppi_L));
 
@@ -91,6 +94,21 @@ Scene *New_GameScene(int label)
 
 void game_scene_update(Scene *self)
 {
+    susu *chara = ((susu *)(get_susu()->pDerivedObj));
+    if (chara->base.hp <= 0)
+    {
+        is_dead =1;
+    }
+    if(is_dead)
+    {
+        if (key_state[ALLEGRO_KEY_ENTER])
+        {
+            self->scene_end = true;
+            chara->base.hp = chara->base.full_hp;
+            window = 0;
+            is_dead=0;
+        }
+    }
     if (key_state[ALLEGRO_KEY_ESCAPE]) {
         is_paused = !is_paused;
         key_state[ALLEGRO_KEY_ESCAPE] = false;
@@ -180,6 +198,12 @@ void game_scene_draw(Scene *self)
         al_draw_text(pause_font, pause_option == 0 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 0, ALLEGRO_ALIGN_CENTRE, "Continue");
         al_draw_text(pause_font, pause_option == 1 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 60, ALLEGRO_ALIGN_CENTRE, "Reset");
         al_draw_text(pause_font, pause_option == 2 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 120, ALLEGRO_ALIGN_CENTRE, "Main Menu");
+    }
+    if(is_dead)
+    {
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));
+        al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2 - 150, ALLEGRO_ALIGN_CENTRE, "HaHa");
+        al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Press Enter to return to menu");
     }
 }
 
