@@ -87,6 +87,7 @@ Scene *New_GameScene(int label)
     // initialise monster factory (optional reset)
     MF_Reset();
     Level_switch_Init();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     pause_font = al_load_ttf_font("assets/font/pirulen.ttf", 48, 0);
     // setting derived object function
     pObj->Update = game_scene_update;
@@ -241,7 +242,9 @@ void game_scene_draw(Scene *self)
             game_background = al_load_bitmap("assets/image/level3.png");            
         }
     }
+
     al_draw_scaled_bitmap(game_background, 0, 0, al_get_bitmap_width(game_background), al_get_bitmap_height(game_background), 0, 0, WIDTH, HEIGHT, 0);
+    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(255, 255, 255, 100));    
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++) {
         Elements *ele = allEle.arr[i];
@@ -250,7 +253,7 @@ void game_scene_draw(Scene *self)
     Level_switch_DrawOverlay();
     if (is_paused)
     {
-        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(127, 127, 127, 100));
         al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2 - 80, ALLEGRO_ALIGN_CENTRE, "Paused");
         al_draw_text(pause_font, pause_option == 0 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 0, ALLEGRO_ALIGN_CENTRE, "Continue");
         al_draw_text(pause_font, pause_option == 1 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 60, ALLEGRO_ALIGN_CENTRE, "Reset");
