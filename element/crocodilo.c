@@ -14,9 +14,9 @@
 
 /* ---------- Crocodilo 參數（與原版相同） ---------- */
 #define CHASE_SPEED      3.0f
-#define ARRIVE_EPSILON 200.0f
+#define ARRIVE_EPSILON 400.0f
 #define COOLDOWN_FRAMES 180
-#define BULLET_DAMAGE    40
+#define BULLET_DAMAGE    400
 #define BULLET_SPEED     7.0f
 #define SHOT_RANGE     1000.0f
 
@@ -59,7 +59,7 @@ Elements *New_crocodilo(int label)
     } while (pl && fabs(pD->x - pl->x) < ARRIVE_EPSILON &&
                    fabs(pD->y - pl->y) < ARRIVE_EPSILON);
 
-    pD->base.hp     = 60;
+    pD->base.hp     = 600;
     pD->base.side   = 1;
     pD->base.hitbox = New_Rectangle(pD->x,           pD->y,
                                     pD->x + pD->width,

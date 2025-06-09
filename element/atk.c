@@ -27,7 +27,7 @@ Elements *New_Atk(int label,
     Elements *pObj        = New_Elements(label);
 
     /* 預設貼圖 */
-    pDerivedObj->img = al_load_bitmap("assets/image/ball.png");
+    pDerivedObj->img = al_load_bitmap("assets/image/fire_ball.png");
 
     pDerivedObj->width  = al_get_bitmap_width (pDerivedObj->img);
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img);

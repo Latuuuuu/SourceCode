@@ -14,8 +14,8 @@
 #include "../scene/gamescene.h"
 
 /* 參數同上 */
-#define CHASE_SPEED     3.0f
-#define ARRIVE_EPSILON 60.0f
+#define CHASE_SPEED     2.0f
+#define ARRIVE_EPSILON 400.0f
 #define COOLDOWN_FRAMES 180
 #define BULLET_DAMAGE   40
 #define BULLET_SPEED    3.0f

@@ -15,10 +15,10 @@
 
 /* --- 參數 --- */
 #define CHASE_SPEED     3.0f
-#define ARRIVE_EPSILON 60.0f
+#define ARRIVE_EPSILON 200.0f
 #define COOLDOWN_FRAMES 180
 #define BULLET_DAMAGE   40
-#define BULLET_SPEED    3.0f
+#define BULLET_SPEED    5.0f
 #define SHOT_RANGE      500.0f
 
 static void _trippi_update_position(Elements *self, int dx, int dy);
