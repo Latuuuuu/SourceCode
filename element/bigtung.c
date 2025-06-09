@@ -17,9 +17,9 @@
    --------------------------------------------------*/
 #define CHASE_SPEED            3.0f   /* 像素 / frame */
 #define ARRIVE_EPSILON         60.0f  /* 抵達判定半徑 */
-#define ATTACK_DISTANCE        150.0f /* 自動攻擊距離 */
+#define ATTACK_DISTANCE        100.0f /* 自動攻擊距離 */
 #define ATTACK_COOLDOWN_FRAMES 120    /* 2 秒冷卻 (60 FPS * 2) */
-#define TUNG_ATTACK_DAMAGE    50     /* ← 在這裡調整攻擊力 */
+#define TUNG_ATTACK_DAMAGE    1000     /* ← 在這裡調整攻擊力 */
 
 /* --------------------------------------------------
    建構函式
@@ -42,7 +42,7 @@ Elements *New_bigtung(int label)
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img[0]);
     pDerivedObj->x = 300;
     pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
-    pDerivedObj->base.hp   = 50;
+    pDerivedObj->base.hp   = 500;
     pDerivedObj->base.side = 1;          /* 敵方陣營 */
     
 
