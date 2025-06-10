@@ -236,7 +236,7 @@ void susu_update(Elements *self)
             float speed = 25.0;
             float vx = speed * dx / len;
             float vy = speed * dy / len;
-            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0, chara->y + chara->height*0.5 - 70.0,vx,vy,chara->damage,0);                                      
+            pro = New_Atk(Atk_L,chara->x + chara->width*0.5 - 20.0, chara->y + chara->height*0.5 - 70.0,vx,vy,chara->damage*2,0);                                      
             if(pro)
             {
                 _Register_elements(scene, pro);

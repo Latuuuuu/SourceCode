@@ -42,7 +42,7 @@ Elements *New_bigtung(int label)
     pDerivedObj->height = al_get_bitmap_height(pDerivedObj->img[0]);
     pDerivedObj->x = 300;
     pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
-    pDerivedObj->base.hp   = 500;
+    pDerivedObj->base.hp   = 1000;
     pDerivedObj->base.side = 1;          /* 敵方陣營 */
     
 

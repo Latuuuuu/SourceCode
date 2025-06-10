@@ -111,11 +111,16 @@ void game_scene_update(Scene *self)
     {
         if (key_state[ALLEGRO_KEY_ENTER])
         {
+            key_state[ALLEGRO_KEY_ENTER]= false;
             self->scene_end = true;
             chara->base.hp = chara->base.full_hp;
             window = 0;
             is_dead=0;
             is_win=0;
+            for(int i=0;i<5;i++)
+            {
+                switch_level[i]=0; // Reset the level switch
+            }
             return;
 
         }
