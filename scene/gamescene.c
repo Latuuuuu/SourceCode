@@ -162,9 +162,13 @@ void game_scene_update(Scene *self)
     }
     double now = al_get_time();
     if (_prev_time == 0.0) _prev_time = now;
+    if (key_state[ALLEGRO_KEY_RIGHT])
+    {
+        now+=10.0;
+    }
     double dt = now - _prev_time;
     _prev_time = now;
-
+    
     // let factory decide whether to spawn monsters this frame
     //MF_Update(self, dt);
     Level_switch_Update(self, dt);

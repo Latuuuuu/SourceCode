@@ -124,7 +124,7 @@ void Level_switch_DrawOverlay(void)
             al_draw_filled_rectangle(0,0,WIDTH,HEIGHT, al_map_rgb(0,0,0));
             char buf[32];
             sprintf(buf, "LEVEL %d", level_no);
-            al_draw_text(level_font, al_map_rgb(255,255,255),WIDTH/2, HEIGHT/2-32, ALLEGRO_ALIGN_CENTRE, buf);
+            al_draw_text(level_font, al_map_rgb(255,255,255),WIDTH/2, HEIGHT/2-100, ALLEGRO_ALIGN_CENTRE, buf);
         }
     }
 }
