@@ -107,11 +107,17 @@ void susu_update(Elements *self)
         }
         else if (key_state[ALLEGRO_KEY_Q])
         {
-            chara->state = ATK;
+            if(chara->q_timer <= 0)
+            {
+                chara->state = ATK;
+            }
         }
         else if (key_state[ALLEGRO_KEY_E])
         {
-            chara->state = EARTHQUAKE;
+            if(chara->e_timer <=0)
+            {
+                chara->state = EARTHQUAKE;
+            }
         }
         else if (key_state[ALLEGRO_KEY_SPACE] && space==0)
         {
@@ -156,11 +162,17 @@ void susu_update(Elements *self)
         }
         else if (key_state[ALLEGRO_KEY_Q])
         {
-            chara->state = ATK;
+            if(chara->q_timer <= 0)
+            {
+                chara->state = ATK;
+            }
         }
         else if (key_state[ALLEGRO_KEY_E])
         {
-            chara->state = EARTHQUAKE;
+            if(chara->e_timer <=0)
+            {
+                chara->state = EARTHQUAKE;
+            }
         }
         else if (key_state[ALLEGRO_KEY_SPACE] && space==0)
         {
