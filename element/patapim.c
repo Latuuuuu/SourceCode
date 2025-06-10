@@ -128,7 +128,14 @@ void patapim_update(Elements *self) {
             chara->y + chara->height / 2,
             EARTHQUAKE_DAMAGE,
             chara->base.side);
-        if (quake) _Register_elements(scene, quake);
+        if (quake){
+
+             Earthquake *eq = (Earthquake *)quake->pDerivedObj;
+            /* 換貼圖 */
+            al_destroy_bitmap(eq->img);
+            eq->img = al_load_bitmap("assets/image/boom.png");
+            _Register_elements(scene, quake);
+        } 
         chara->quake_timer = EARTHQUAKE_COOLDOWN;
     }
 }
