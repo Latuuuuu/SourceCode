@@ -27,7 +27,9 @@
 static bool is_paused = false;
 static int pause_option = 0; // 0 = Resume, 1 = Reset, 2 = Main Menu
 ALLEGRO_FONT *pause_font = NULL;
+ALLEGRO_BITMAP *game_background = NULL;
 static bool is_dead = 0;
+int switch_level[5]={0};
 static bool is_win = 0;
 
 void Load_Map_And_Generate_Tile(Scene *scene) {
@@ -85,6 +87,7 @@ Scene *New_GameScene(int label)
     // initialise monster factory (optional reset)
     MF_Reset();
     Level_switch_Init();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     pause_font = al_load_ttf_font("assets/font/pirulen.ttf", 48, 0);
     // setting derived object function
     pObj->Update = game_scene_update;
@@ -102,7 +105,7 @@ void game_scene_update(Scene *self)
     susu *chara = ((susu *)(get_susu()->pDerivedObj));
     if (chara->base.hp <= 0)
     {
-        is_dead =1;
+        is_dead = 1;
     }
     if(is_dead || is_win)
     {
@@ -113,8 +116,11 @@ void game_scene_update(Scene *self)
             window = 0;
             is_dead=0;
             is_win=0;
+            return;
+
         }
     }
+
     if (key_state[ALLEGRO_KEY_ESCAPE]) {
         is_paused = !is_paused;
         key_state[ALLEGRO_KEY_ESCAPE] = false;
@@ -137,6 +143,10 @@ void game_scene_update(Scene *self)
             if (pause_option == 0) is_paused = false;               // Resume
             else if (pause_option == 1)
             {                           // Reset
+                for(int i=0;i<5;i++)
+                {
+                    switch_level[i]=0; // Reset the level switch
+                }
                 self->scene_end = true;
                 window = 1;
                 is_paused= false;                     // Reset the game
@@ -184,13 +194,60 @@ void game_scene_draw(Scene *self)
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
     // draw map tiles
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
-            ALLEGRO_BITMAP *tile = (map[y][x] == 1) ? wall_tile : floor_tile;
-            al_draw_bitmap(tile, x * TILE_SIZE, y * TILE_SIZE, 0);
+    // for (int y = 0; y < MAP_HEIGHT; y++) {
+    //     for (int x = 0; x < MAP_WIDTH; x++) {
+    //         ALLEGRO_BITMAP *tile = (map[y][x] == 1) ? wall_tile : floor_tile;
+    //         al_draw_bitmap(tile, x * TILE_SIZE, y * TILE_SIZE, 0);
+    //     }
+    // }
+    if(level_no<=1)
+    {
+        if(!switch_level[0])
+        {
+            printf("switch level 0\n");
+            switch_level[0]=1;
+            game_background = al_load_bitmap("assets/image/level0.png");            
+        }
+    }
+    else if(level_no==2)
+    {
+        if(!switch_level[1])
+        {
+            printf("switch level 1\n");
+            switch_level[1]=1;
+            game_background = al_load_bitmap("assets/image/level1.png");            
+        }
+    }
+    else if(level_no==3)
+    {
+        if(!switch_level[2])
+        {
+            printf("switch level 2\n");
+            switch_level[2]=1;
+            game_background = al_load_bitmap("assets/image/level2.png");            
+        }
+    }
+    else if(level_no==4)
+    {
+        if(!switch_level[3])
+        {
+            printf("switch level 3\n");
+            switch_level[3]=1;
+            game_background = al_load_bitmap("assets/image/level3.png");            
+        }
+    }
+    else if(level_no==5)
+    {
+        if(!switch_level[4])
+        {
+            printf("switch level 4\n");
+            switch_level[4]=1;
+            game_background = al_load_bitmap("assets/image/level3.png");            
         }
     }
 
+    al_draw_scaled_bitmap(game_background, 0, 0, al_get_bitmap_width(game_background), al_get_bitmap_height(game_background), 0, 0, WIDTH, HEIGHT, 0);
+    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(255, 255, 255, 100));    
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++) {
         Elements *ele = allEle.arr[i];
@@ -199,7 +256,7 @@ void game_scene_draw(Scene *self)
     Level_switch_DrawOverlay();
     if (is_paused)
     {
-        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 160));
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(127, 127, 127, 100));
         al_draw_text(pause_font, al_map_rgb(255, 255, 255), WIDTH / 2, HEIGHT / 2 - 80, ALLEGRO_ALIGN_CENTRE, "Paused");
         al_draw_text(pause_font, pause_option == 0 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 0, ALLEGRO_ALIGN_CENTRE, "Continue");
         al_draw_text(pause_font, pause_option == 1 ? al_map_rgb(255, 255, 0) : al_map_rgb(200, 200, 200), WIDTH / 2, HEIGHT / 2 + 60, ALLEGRO_ALIGN_CENTRE, "Reset");

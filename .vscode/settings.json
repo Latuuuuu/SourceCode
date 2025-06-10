@@ -22,6 +22,7 @@
 		"global.h": "c",
 		"scenemanager.h": "c",
 		"allegro_font.h": "c",
-		"monster_factory.h": "c"
+		"monster_factory.h": "c",
+		"level_switch.h": "c"
 	}
 }
